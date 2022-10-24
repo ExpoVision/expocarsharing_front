@@ -1,0 +1,27 @@
+$lilac: #6866D7;
+$purple: #6546BD;
+$purple-dark: #312063;
+$black-bg: #0B0B0B;
+$purple-opacity: rgba(101, 70, 189, 0.3);
+$purple-opacity-bg: rgba(20, 32, 139, 0.3);
+$darkgrey: #4F4F4F;
+
+//mixins 
+
+@mixin flex-sb-c {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin flex-fs-c {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+@mixin flex-sb-str {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
