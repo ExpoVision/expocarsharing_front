@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 /***  Landing views  ***/
 import HomeView from '@/modules/Landing/views/HomeView.vue'
 import ProfileView from '@/modules/Landing/views/ProfileView.vue'
+import ProfileSettingsView from '@/modules/Landing/views/ProfileSettingsView.vue'
 import CatalogView from '@/modules/Landing/views/CatalogView.vue'
 import TermsView from '@/modules/Landing/views/TermsView.vue'
 import CarsharingView from '@/modules/Landing/views/CarsharingView.vue'
@@ -22,7 +23,15 @@ const routes = [
     name: 'Profile',
     component: ProfileView,
     meta: {
-      layout: 'LandingLayout'
+      layout: 'ProfileLayout'
+    }
+  },
+  {
+    path: '/profilesettings',
+    name: 'ProfileSettings',
+    component: ProfileSettingsView,
+    meta: {
+      layout: 'ProfileLayout'
     }
   },
   {

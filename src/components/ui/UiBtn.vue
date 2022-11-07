@@ -1,5 +1,5 @@
 <template>
-  <button class="ui-btn" :class="{'ui-btn--white': type}" :style="cssVars">
+  <button class="ui-btn" :class="{'ui-btn--white': white}" :style="cssVars">
     <slot></slot>
   </button>
 </template>
@@ -17,7 +17,7 @@ export default {
       required: false,
       default: '1.5em 2em'
     },
-    type: {
+    white: {
       type: String,
       required: false,
     }
