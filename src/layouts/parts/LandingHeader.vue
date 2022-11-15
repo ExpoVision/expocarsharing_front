@@ -3,11 +3,11 @@
     <div class="wrapper">
       <div class="logo">Лого</div>
       <MainNav type="mobile-hidden" @toggleMobileMenu="toggleMobileMenu"></MainNav>
-      <a class="signin" @click="toProfile">
+      <a class="signin" @click="openSigninModal">
         <img src="@/assets/img/icons/avatar.svg" alt="">
         Войти
       </a>
-      <UiBurgerMenu v-if="isActive" @toggleMobileMenu="toggleMobileMenu"></UiBurgerMenu>
+      <BurgerMenu v-if="isActive" @toggleMobileMenu="toggleMobileMenu"></BurgerMenu>
 
       <div class="burger-menu-icon" @click="toggleMobileMenu" :class="{'is-active': isActive}">
         <span></span>
@@ -17,30 +17,55 @@
       </div>
     </div>
   </header>
+
+  <LoginModal :show="showLoginModal" @close="closeLoginModal" @openSignupModal="openSignupModal" />
+  <SignupModal :show="showSignupModal" @close="closeSignupModal" />
 </template>
 
 <script>
 import MainNav from '@/components/MainNavComponent.vue'
-import UiBurgerMenu from '@/components/ui/UiBurgerMenu.vue';
-
+import BurgerMenu from '@/components/BurgerMenu.vue'
+import LoginModal from '@/components/auth/LoginModal.vue'
+import SignupModal from '@/components/auth/SignupModal.vue'
 
 export default {
     name: 'LandingHeader',
-    components: { MainNav, UiBurgerMenu },
+    components: { MainNav, BurgerMenu, LoginModal, SignupModal },
     data() {
       return {
-        isActive: false
+        isActive: false,
+        showLoginModal: false,
+        showSignupModal: false,
       }
     },
     methods: {
-      toProfile() {
-        this.$router.push({name: 'Profile'})
-      },
-      toAdminPanel() {
+      toAdminPanel(){
         this.$router.push({name: 'carsharingstatus'})
       },
       toggleMobileMenu(){
         this.isActive = !this.isActive
+
+        if(this.isActive) {
+          document.body.style.overflow = 'hidden'
+        } else {
+          document.body.style.overflow = 'auto'
+        }
+      },
+      openSigninModal(){
+        this.showLoginModal = true
+        document.body.classList.add('modal-open')
+      },
+      openSignupModal(){
+        this.showLoginModal = false
+        this.showSignupModal = true
+      },
+      closeLoginModal(){
+        this.showLoginModal = false
+        document.body.classList.remove('modal-open')
+      },
+      closeSignupModal(){
+        this.showSignupModal = false
+        document.body.classList.remove('modal-open')
       }
     }
 }
@@ -67,12 +92,13 @@ export default {
         color: $purple;
         cursor: pointer;
 
-        @media screen and (max-width: 971px) {
-          display: none;
-        }
-
         img {
           margin-right: 1em;
+          width: 20px;
+        }
+
+        @media screen and (max-width: 970px) {
+          display: none;
         }
       }
     }

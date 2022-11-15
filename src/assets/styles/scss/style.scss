@@ -130,6 +130,10 @@ body{
     color: #FFF;
     font-family: 'Montserrat', sans-serif;
     font-weight: 300;
+
+	&.modal-open {
+		overflow: hidden;
+	}
 }
 
 h1, h2, h3, h4{
@@ -189,7 +193,7 @@ $menu-icon-color--active: #FFF;
         width: $menu-icon-width;
         height: $menu-icon-height;
         display: none;
-		z-index: 10001;
+		z-index: 1001;
 
 		@media screen and (max-width: 971px){
 			display: inline-block;
@@ -240,4 +244,16 @@ $menu-icon-color--active: #FFF;
         top: $menu-icon-width / 3.2;
         transform: rotate(-45deg);
     }
+}
+
+
+
+a {
+	color: $purple;
+	transition: .3s;
+
+	&:hover,
+	&:active {
+		color: $lilac;
+	}
 }
