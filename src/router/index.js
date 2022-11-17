@@ -8,6 +8,15 @@ import CatalogView from '@/modules/Landing/views/CatalogView.vue'
 import TermsView from '@/modules/Landing/views/TermsView.vue'
 import CarsharingView from '@/modules/Landing/views/CarsharingView.vue'
 
+/***  Admin views  ***/
+import AdminCarsharingStatus from '@/modules/Admin/views/AdminCarsharingStatus.vue'
+import AdminCarsharingInfo from '@/modules/Admin/views/AdminCarsharingInfo.vue'
+import AdminStatistics from '@/modules/Admin/views/AdminStatistics.vue'
+import AdminUsers from '@/modules/Admin/views/AdminUsers.vue'
+import AdminUserProfile from '@/modules/Admin/views/AdminUsers.vue'
+
+
+
 
 const routes = [
   {
@@ -58,6 +67,47 @@ const routes = [
       layout: 'LandingLayout'
     }
   },
+  {
+    path: '/carsharingstatus',
+    name: 'AdminCarsharingStatus',
+    component: AdminCarsharingStatus,
+    meta: {
+      layout: 'AdminLayout'
+    }
+  },
+  {
+    path: '/carsharinginfo/:id',
+    name: 'AdminCarsharingInfo',
+    component: AdminCarsharingInfo,
+    meta: {
+      layout: 'AdminLayout'
+    }
+  },
+  {
+    path: '/statistics',
+    name: 'AdminStatistics',
+    component: AdminStatistics,
+    meta: {
+      layout: 'AdminLayout'
+    }
+  },
+  {
+    path: '/users',
+    name: 'AdminUsers',
+    component: AdminUsers,
+    meta: {
+      layout: 'AdminLayout'
+    }
+  }
+  ,
+  {
+    path: '/users/:id',
+    name: 'AdminUserProfile',
+    component: AdminUserProfile,
+    meta: {
+      layout: 'AdminLayout'
+    }
+  }
 ]
 
 const router = createRouter({

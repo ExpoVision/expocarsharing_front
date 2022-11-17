@@ -53,14 +53,16 @@ export default {
         border: 1px solid $purple-opacity;
         backdrop-filter: blur(40px);
         background: rgba(11, 11, 11, 0.7);
+        cursor: pointer;
 
         &--small{
-            max-width: 250px;
+           /*  max-width: 250px; */
             font-size: .9rem;
 
             .car {
                 &__title{
                     font-size: 1rem;
+                    margin-left: 0;
                 }
 
                 &__img{

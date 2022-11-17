@@ -1,5 +1,5 @@
 <template>
-  <button class="ui-btn" :class="{'ui-btn--white': white}" :style="cssVars">
+  <button class="ui-btn" :class="btnClass" :style="cssVars">
     <slot></slot>
   </button>
 </template>
@@ -17,7 +17,8 @@ export default {
       required: false,
       default: '1.5em 2em'
     },
-    white: {
+    // ui-btn--white, 
+    type: {
       type: String,
       required: false,
     }
@@ -27,6 +28,14 @@ export default {
       return{
         '--width': this.width,
         '--padding': this.padding,
+      }
+    },
+    btnClass () {
+      switch(this.type) {
+        case('white'):
+          return 'ui-btn--white'
+        default: 
+          return ''
       }
     }
   }
@@ -55,13 +64,13 @@ export default {
         }
 
         &--white {
-          background-color: #FFF;
-          color: $purple;
-          border: 2px solid $purple;
+          border: 1px solid $purple;
 
-          &:hover, &:active {
-            background-color: $purple;
-            color: #FFF;
+          &:hover, 
+          &:active {
+            background-color: #FFF;
+            color: $purple;
+            border: 1px solid $purple;
           }
         }
     }
