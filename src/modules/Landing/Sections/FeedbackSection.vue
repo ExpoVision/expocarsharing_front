@@ -4,8 +4,8 @@
         <h2 class="feedback__heading">Остались вопросы?</h2>
         <p class="feedback__text">Оставьте заявку и мы свяжемся с вами</p>
         <form action="" class="feedback__form">
-          <ui-input type="text" placeholder="Ваше Имя"></ui-input>
-          <ui-input type="text" placeholder="+ 7 ___ ___ - __ - __"></ui-input>
+          <ui-input type="text" placeholder="Ваше Имя" width="362px"></ui-input>
+          <ui-input type="text" placeholder="+ 7 ___ ___ - __ - __" width="362px"></ui-input>
           <ui-btn>Оставить заявку</ui-btn>
         </form>
         <p class="feedback__personal-data">Нажимая кнопку «Оставить заявку», вы даете согласие на обработку своих персональных данных в соответствии со статьей 9 Федерального закона от 27 июля 2006 г. № 152-ФЗ «О персональных данных»</p>
@@ -42,15 +42,23 @@
         @include flex-sb-c;
         margin-bottom: 1.625em;
 
-        input{
+        .ui-input-label{
           width: 362px;
           margin-right: 1.875em;
+
+          @media screen and (max-width: 1460px) {
+            width: 300px;
+          }
+
+          @media screen and (max-width: 1460px) {
+            width: 270px;
+          }
         }
 
         @media screen and (max-width: 970px) {
           flex-wrap: wrap;
 
-          input{
+          .ui-input-label{
             width: 100%;
             margin-right: 0;
             margin-bottom: 13px;
