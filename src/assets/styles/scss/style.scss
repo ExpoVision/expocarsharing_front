@@ -202,7 +202,7 @@ $menu-icon-color--active: #FFF;
 
     &-icon span {
         position: absolute;
-        height: $menu-icon-width / 16;
+        height: calc($menu-icon-width / 16);
         width: 100%;
         background-color: $menu-icon-color;
         transition: all 250ms ease-in-out;
@@ -211,12 +211,12 @@ $menu-icon-color--active: #FFF;
     }
 
     &-icon span:nth-child(1) {
-        top: $menu-icon-width / 32;
+        top: calc($menu-icon-width / 32);
     }
         
     &-icon span:nth-child(2),
     &-icon span:nth-child(3) {
-        top: $menu-icon-width / 3.2;
+        top: calc($menu-icon-width / 3.2);
     }
 
     &-icon span:nth-child(4) {
@@ -241,7 +241,7 @@ $menu-icon-color--active: #FFF;
     }
 
     &-icon.is-active span:nth-child(3) {
-        top: $menu-icon-width / 3.2;
+        top: calc($menu-icon-width / 3.2);
         transform: rotate(-45deg);
     }
 }

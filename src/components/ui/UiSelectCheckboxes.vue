@@ -6,7 +6,7 @@
       </div>
       <div class="select__body">
         <div 
-            v-for="(block,index) in blocks"
+            v-for="(block, index) in blocks"
             :key="index"
             class="select__block"
         >
@@ -107,13 +107,19 @@
       }
 
       &__checkboxes{
-        @include flex-sb-c;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
         flex-wrap: wrap;
         gap: 1em;
         
 
         label{
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
             width: 45%;
+
             span{
                 margin-left: 13px;
                 color: #FFF;

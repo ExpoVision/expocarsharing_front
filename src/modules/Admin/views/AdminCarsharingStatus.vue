@@ -10,7 +10,7 @@
             <div class="car-block__time">
                 > {{carsharing.car.time}}
             </div>
-            <CarComponent :car="carsharing.car" size="small"></CarComponent>
+            <CarComponent :car="carsharing.car" size="small" />
             <UiBtn width="93%" padding="1em" type="white" @click="toCarsharingInfo(carsharing.id)">Посмотреть</UiBtn>
         </div>
     </div>
