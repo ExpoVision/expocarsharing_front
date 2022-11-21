@@ -15,7 +15,7 @@ import AdminStatistics from '@/modules/Admin/views/AdminStatistics.vue'
 import AdminUsers from '@/modules/Admin/views/AdminUsers.vue'
 import AdminUserProfile from '@/modules/Admin/views/AdminUserProfile.vue'
 import AdminSupportRequests from '@/modules/Admin/views/AdminSupportRequests.vue'
-
+import AdminContent from '@/modules/Admin/views/AdminContent.vue'
 
 
 const routes = [
@@ -111,6 +111,14 @@ const routes = [
     path: '/supportrequests',
     name: 'AdminSupportRequests',
     component: AdminSupportRequests,
+    meta: {
+      layout: 'AdminLayout'
+    }
+  },
+  {
+    path: '/content',
+    name: 'AdminContent',
+    component: AdminContent,
     meta: {
       layout: 'AdminLayout'
     }
