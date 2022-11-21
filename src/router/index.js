@@ -13,8 +13,8 @@ import AdminCarsharingStatus from '@/modules/Admin/views/AdminCarsharingStatus.v
 import AdminCarsharingInfo from '@/modules/Admin/views/AdminCarsharingInfo.vue'
 import AdminStatistics from '@/modules/Admin/views/AdminStatistics.vue'
 import AdminUsers from '@/modules/Admin/views/AdminUsers.vue'
-import AdminUserProfile from '@/modules/Admin/views/AdminUsers.vue'
-
+import AdminUserProfile from '@/modules/Admin/views/AdminUserProfile.vue'
+import AdminSupportRequests from '@/modules/Admin/views/AdminSupportRequests.vue'
 
 
 
@@ -98,12 +98,19 @@ const routes = [
     meta: {
       layout: 'AdminLayout'
     }
-  }
-  ,
+  },
   {
     path: '/users/:id',
     name: 'AdminUserProfile',
     component: AdminUserProfile,
+    meta: {
+      layout: 'AdminLayout'
+    }
+  },
+  {
+    path: '/supportrequests',
+    name: 'AdminSupportRequests',
+    component: AdminSupportRequests,
     meta: {
       layout: 'AdminLayout'
     }

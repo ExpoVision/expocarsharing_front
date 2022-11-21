@@ -47,6 +47,23 @@ export default createStore({
                 status: 'completed',
                 time: '02:40:34',
             },
+        ],
+        supportRequests: [
+            {   
+                id: 1, 
+                user: {id: 1, fullName: 'Иванов Иван Иванович', phoneNumber: '+79990000000'},
+                status: 'done'
+            },
+            {   
+                id: 2, 
+                user: {id: 1, fullName: 'Иванов Иван Иванович', phoneNumber: '+79990000000'},
+                status: 'pending'
+            },
+            {   
+                id: 3, 
+                user: {id: 1, fullName: 'Иванов Иван Иванович', phoneNumber: '+79990000000'},
+                status: 'done'
+            },
         ]
     },
     getters: {
@@ -65,6 +82,9 @@ export default createStore({
         getCarsharingById: (_, getters) => (id) => {
             return getters.getCarsharing.find(carsharing => carsharing.id == id)
         },
+        getSupportRequests: (state) => {
+            return state.supportRequests
+        }
     },
     mutations: {},
     actions: {},
