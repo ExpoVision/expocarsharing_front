@@ -14,7 +14,7 @@
                 <div>{{request.user.fullName}}</div>
                 <div>{{request.user.phoneNumber}}</div>
             </div>
-            <UiBtn width="165px" padding="1em" type="white" @click="done">Готово</UiBtn>
+            <UiBtn width="165px" padding="1em" type="white" @click="complete">Готово</UiBtn>
         </li>
     </ul>
   </div>
@@ -36,12 +36,12 @@ export default {
         },
         supportRequestsByStatus() {
             return this.showArchive 
-                    ? this.supportRequestsFromStore.filter(request => request.status == 'done')
+                    ? this.supportRequestsFromStore.filter(request => request.status == 'completed')
                     : this.supportRequestsFromStore.filter(request => request.status == 'pending')
         }
     },
     methods: {
-        done() { 
+        complete() { 
             //
         }
     }
