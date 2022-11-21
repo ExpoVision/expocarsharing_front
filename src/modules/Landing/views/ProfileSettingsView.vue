@@ -68,7 +68,7 @@
         }
 
         &__settings-row{
-            @include flex-sb-fe;
+            @include flex-sb-c;
 
             &--stretch{
                 align-items: stretch;

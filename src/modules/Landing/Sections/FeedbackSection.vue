@@ -42,7 +42,7 @@
         @include flex-sb-c;
         margin-bottom: 1.625em;
 
-        .ui-input-label{
+        .ui-input{
           width: 362px;
           margin-right: 1.875em;
 
@@ -58,7 +58,7 @@
         @media screen and (max-width: 970px) {
           flex-wrap: wrap;
 
-          .ui-input-label{
+          .ui-input{
             width: 100%;
             margin-right: 0;
             margin-bottom: 13px;

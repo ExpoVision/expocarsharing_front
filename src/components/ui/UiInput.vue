@@ -1,12 +1,18 @@
 <template>
-    <label class="ui-input-label">
-      <span :class="{'empty': !label}">{{label ? label : '_'}}</span>
+    <label v-if="label" class="ui-input-label">
+      <span>{{label}}</span>
       <input 
-          class="ui-input"
-          :type="type"
-          :placeholder="placeholder"
+        class="ui-input"
+        :type="type"
+        :placeholder="placeholder"
       />
     </label>
+    <input 
+      v-else
+      class="ui-input ui-input--single"
+      :type="type"
+      :placeholder="placeholder"
+    />
   </template>
   
   <script>
@@ -33,9 +39,6 @@
         margin-bottom: 1.1em;
         font-size: 1rem;
         color: $purple-dark;
-        &.empty{
-          opacity: 0;
-        }
       }
     }
 
@@ -56,4 +59,5 @@
           }
         }
     }
+
   </style>

@@ -26,6 +26,12 @@ $darkgrey: #4F4F4F;
     align-items: center;
 }
 
+@mixin flex-fs-str {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
 @mixin flex-sb-str {
     display: flex;
     justify-content: space-between;
