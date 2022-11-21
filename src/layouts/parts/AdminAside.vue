@@ -21,11 +21,15 @@
           <ui-btn 
             width="100%" 
             padding="1em"
-            @click="this.$router.push(item.link)"
+            @click="this.$router.push(item.to)"
           >{{item.label}}</ui-btn>
         </li>
       </ul>
     </nav>
+
+    <div class="admine-aside__bottom">
+      <router-link to="/">ruscapcar.ru</router-link>
+    </div>
   </aside>
 </template>
 
@@ -35,16 +39,16 @@ import UiBtn from '@/components/ui/UiBtn.vue'
 export default {
     setup() {
         const navItems = [
-            { label: "Статус каршеринга", to: "" },
-            { label: "Карта", to: "" },
-            { label: "Статистика", to: "" },
-            { label: "Контент", to: "" },
-            { label: "Пользователи", to: "" },
-            { label: "Настройки", to: "" },
-            { label: "Запросы поддержки", to: "" },
+            { label: "Статус каршеринга", to: "/carsharingstatus" },
+            { label: "Карта", to: "/" },
+            { label: "Статистика", to: "/statistics" },
+            { label: "Контент", to: "/content" },
+            { label: "Пользователи", to: "/users" },
+            { label: "Настройки", to: "/" },
+            { label: "Запросы поддержки", to: "/supportrequests" },
         ];
         return {
-            navItems
+          navItems
         };
     },
     components: { UiBtn }
@@ -53,8 +57,11 @@ export default {
 
 <style lang="scss" scoped>
     .admin-aside{
+        @include flex-sb-c;
+        flex-direction: column;
         min-height: 100vh;
         width: 25%;
+        
 
         &__top{
           @include flex-fs-c;
@@ -63,6 +70,7 @@ export default {
           h2{
             margin-bottom: .5em;
             color: #FFF;
+            font-weight: 400;
           }
 
           a{
@@ -90,5 +98,14 @@ export default {
           margin-bottom: 1em;
           text-transform: none;
         }
+
+        &__bottom{
+          width: fit-content;
+          margin: auto;
+        }
+    }
+
+    .admin-nav {
+      width: 100%;
     }
 </style>
