@@ -64,7 +64,112 @@ export default createStore({
                 user: {id: 1, fullName: 'Иванов Иван Иванович', phoneNumber: '+79990000000'},
                 status: 'done'
             },
-        ]
+        ],
+        filterBlocks: {
+            mark: [
+                {
+                    title: 'Audi S серия', 
+                    items: [
+                        {value: 'S1', label: 'S1',},
+                        {value: 'S2', label: 'S2',},
+                        {value: 'SQ', label: 'SQ',}, 
+                        {value: 'TT', label: 'TT',}, 
+                        {value: 'S3', label: 'S3',},
+                        {value: 'S4', label: 'S4',}
+                    ]
+                }
+            ],
+                
+            model: [
+                {
+                    title: '',
+                    items: [
+                        {value: 'Audi', label: 'Audi'},
+                        {value: 'Bentley', label: 'Bentley'},
+                        {value: 'BMW', label: 'BMW'},
+                        {value: 'Chevrolet', label: 'Chevrolet'},
+                        {value: 'Citroen', label: 'Citroen'},
+                        {value: 'Ferrari', label: 'Ferrari'},
+                        {value: 'Ford', label: 'Ford'},
+                        {value: 'Honda', label: 'Honda'},
+                        {value: 'Hyundai', label: 'Hyundai'},
+                        {value: 'Kia', label: 'Kia'},
+                        {value: 'Lamborghini', label: 'Lamborghini'},
+                        {value: 'Lexus', label: 'Lexus'},
+                        {value: 'Mazda', label: 'Mazda'},
+                        {value: 'Mercedes', label: 'Mercedes'},
+                        {value: 'Mitsubishi', label: 'Mitsubishi'},
+                        {value: 'Nissan', label: 'Nissan'},
+                        {value: 'Opel', label: 'Opel'},
+                        {value: 'Peugeot', label: 'Peugeot'},
+                        {value: 'Porsche', label: 'Porsche'},
+                        {value: 'Renault', label: 'Renault'},
+                        {value: 'Skoda', label: 'Skoda'},
+                        {value: 'Toyota', label: 'Toyota'},
+                        {value: 'Rolls-Royce', label: 'RollsRoyce'},
+                        {value: 'Tesla', label: 'Tesla'},
+                        {value: 'Volkswagen', label: 'Volkswagen'},
+                    ]
+                }
+            ],
+
+            price: [
+                {
+                    title: '',
+                    items: [
+                        {value: '', label: 'до 10 000 ₽'},
+                        {value: '', label: 'от  10 000 ₽ до 20 000 ₽'},
+                        {value: '', label: 'от  20 000 ₽ до 40 000 ₽'},
+                        {value: '', label: 'от  40 000 ₽ до 80 000 ₽'},
+                    ]
+                }
+            ],
+            type: [
+                {
+                    title: '',
+                    items: [
+                        {value: '', label: 'Седан'},
+                        {value: '', label: 'Хэтчбек'},
+                        {value: '', label: 'Универсал'},
+                        {value: '', label: 'Лифтбэк'},
+                        {value: '', label: 'Купе'},
+                        {value: '', label: 'Кабриолет'},
+                        {value: '', label: 'Родстер'},
+                        {value: '', label: 'Тарга'},
+                        {value: '', label: 'Лимузин'},
+                        {value: '', label: 'Стретч'},
+                        {value: '', label: 'Внедорожник'},
+                        {value: '', label: 'Кроссовер'},
+                        {value: '', label: 'Пикап'},
+                        {value: '', label: 'Фургон'},
+                        {value: '', label: 'Минивэн'},
+                        {value: '', label: 'Микроавтобус'},
+                        {value: '', label: 'Автобус'}
+                    ]
+                }
+            ],
+            color: [
+                {
+                    title: '',
+                    items: [
+                        {value: 'white', label: 'Белый'},
+                        {value: 'bege', label: 'Бежевый'},
+                        {value: 'silver', label: 'Серебристый'},
+                        {value: 'grey', label: 'Серый'},
+                        {value: 'black', label: 'Черный'},
+                        {value: 'yellow', label: 'Желтый'},
+                        {value: 'orange', label: 'Оранжевый'},
+                        {value: 'red', label: 'Красный'},
+                        {value: 'brown', label: 'Коричневый'},
+                        {value: 'green', label: 'Зеленый'},
+                        {value: 'lightblue', label: 'Голубой'},
+                        {value: 'blue', label: 'Синий'},
+                        {value: 'purple', label: 'Фиолетовый'},
+                        {value: 'pink', label: 'Розовый'},
+                    ]
+                }
+            ]
+        }
     },
     getters: {
         getUsers: (state) => {
@@ -84,6 +189,9 @@ export default createStore({
         },
         getSupportRequests: (state) => {
             return state.supportRequests
+        },
+        getFiltersBlocks: (state) => {
+            return state.filterBlocks
         }
     },
     mutations: {},

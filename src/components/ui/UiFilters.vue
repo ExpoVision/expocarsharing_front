@@ -1,11 +1,11 @@
 <template>
    <div class="filters">
         <div class="filters__selects">
-            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks"/>
-            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks"/>
-            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks"/>
-            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks"/>
-            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks"/>
+            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks.mark"/>
+            <UiSelectCheckboxes title="Модель" :blocks="filterBlocks.model"/>
+            <UiSelectCheckboxes title="Цена" :blocks="filterBlocks.price"/>
+            <UiSelectCheckboxes title="Тип" :blocks="filterBlocks.type"/>
+            <UiSelectCheckboxes title="Цвет" :blocks="filterBlocks.color"/>
             <button class="filters__reset"><img src="@/assets/img/icons/cross-purple.svg" alt=""> Сбросить всё</button>
         </div>
         <div class="filters__bottom">
@@ -25,27 +25,9 @@ import UiSelectCheckboxes from '@/components/ui/UiSelectCheckboxes.vue'
 
 export default {
     components: { UiSelectCheckboxes },
-    data() {
-        return {
-        filterBlocks: [
-            {title: 'Audi S серия', items: [
-                {value: 'S1', label: 'S1',},
-                {value: 'S2', label: 'S2',},
-                {value: 'SQ', label: 'SQ',}, 
-                {value: 'TT', label: 'TT',}, 
-                {value: 'S3', label: 'S3',},
-                {value: 'S4', label: 'S4',}],
-            },
-
-            {title: 'Audi S серия', items: [
-                {value: 'S1', label: 'S1',},
-                {value: 'S2', label: 'S2',},
-                {value: 'SQ', label: 'SQ',}, 
-                {value: 'TT', label: 'TT',}, 
-                {value: 'S3', label: 'S3',},
-                {value: 'S4', label: 'S4',}],
-            },
-        ]
+    computed: {
+        filterBlocks() {
+            return this.$store.getters.getFiltersBlocks
         }
     }
 }
