@@ -24,7 +24,8 @@ const routes = [
     name: 'Home',
     component: HomeView,
     meta: {
-      layout: 'LandingLayout'
+      layout: 'LandingLayout',
+      title: 'Главная'
     }
   },
   {
@@ -32,7 +33,8 @@ const routes = [
     name: 'Profile',
     component: ProfileView,
     meta: {
-      layout: 'ProfileLayout'
+      layout: 'ProfileLayout',
+      title: 'Профиль'
     }
   },
   {
@@ -40,7 +42,8 @@ const routes = [
     name: 'ProfileSettings',
     component: ProfileSettingsView,
     meta: {
-      layout: 'ProfileLayout'
+      layout: 'ProfileLayout',
+      title: 'Профиль'
     }
   },
   {
@@ -48,7 +51,8 @@ const routes = [
     name: 'Catalog',
     component: CatalogView,
     meta: {
-      layout: 'LandingLayout'
+      layout: 'LandingLayout',
+      title: 'Каталог'
     }
   },
   {
@@ -56,7 +60,8 @@ const routes = [
     name: 'Terms',
     component: TermsView,
     meta: {
-      layout: 'LandingLayout'
+      layout: 'LandingLayout',
+      title: 'Условия'
     }
   },
   {
@@ -64,7 +69,8 @@ const routes = [
     name: 'Carsharing',
     component: CarsharingView,
     meta: {
-      layout: 'LandingLayout'
+      layout: 'LandingLayout',
+      title: 'Каршеринг'
     }
   },
   {

@@ -1,54 +1,33 @@
 <template>
-  <div class="profile">
-    <div class="wrapper">
-      <div class="breadcrambs">
-        <a href="#">Главная</a> 
-        <span>/</span>
-        <a href="#" class="active">Личный кабинет</a>
+  <div class="profile__info">
+    <img src="@/assets/img/profile_avatar.png" alt="">
+    <div>
+      <h2>Иван Иванов</h2>
+      <div class="profile__info-row">
+        <h4>Дата рождения:</h4>
+        <p>25.07.1990</p>
       </div>
-      <div class="profile__body">
-        <aside class="profile__aside">
-          <ul>
-            <li><a href="#">Мой профиль</a></li>
-            <li><a href="#">Настройки</a></li>
-            <li class="signout-li"><a href="#"><img src="@/assets/img/icons/signout.svg" alt="">Выход</a></li>
-          </ul>
-        </aside>
-        <main class="profile__main">
-          <div class="profile__info">
-            <img src="@/assets/img/profile_avatar.png" alt="">
-            <div>
-              <h2>Иван Иванов</h2>
-              <div class="profile__info-row">
-                <h4>Дата рождения:</h4>
-                <p>25.07.1990</p>
-              </div>
-              <div class="profile__info-row">
-                <h4>Номер телефона:</h4>
-                <p>+7 (900) 555-60-60</p>
-              </div>
-              <div class="profile__info-row">
-                <h4>E-mail:</h4>
-                <p>pochta@gmail.com</p>
-              </div>
-            </div>
-          </div>
-          <div class="profile__card">
-            <h2>Статус каршеринга</h2>
-            <div class="profile__card-content">
-              <div class="profile__card-row">
-                <h3>Завершен:</h3><div>02:10:00</div>
-              </div>
-              <div class="profile__card-row">
-                <h3>Итого:</h3><div>1 920 ₽</div>
-              </div>
-            </div>
-            <ui-btn>Завершить</ui-btn>
-          </div>
-        </main>
+      <div class="profile__info-row">
+        <h4>Номер телефона:</h4>
+        <p>+7 (900) 555-60-60</p>
       </div>
-      
+      <div class="profile__info-row">
+        <h4>E-mail:</h4>
+        <p>pochta@gmail.com</p>
+      </div>
     </div>
+  </div>
+  <div class="profile__card">
+    <h2>Статус каршеринга</h2>
+    <div class="profile__card-content">
+      <div class="profile__card-row">
+        <h3>Завершен:</h3><div>02:10:00</div>
+      </div>
+      <div class="profile__card-row">
+        <h3>Итого:</h3><div>1 920 ₽</div>
+      </div>
+    </div>
+    <ui-btn>Завершить</ui-btn>
   </div>
 </template>
 
@@ -63,29 +42,6 @@ export default {
 
 <style lang="scss" scoped>
   .profile {
-    padding: 1.5em 0;
-
-    .breadcrambs{
-
-      margin-bottom: 3.5em;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      gap: .5em;
-      font-size: .75em;
-
-      span{
-        color: $purple-dark;
-      }
-
-      a{
-        color: $purple;
-
-        &.active{
-          color: $purple-dark;
-        }
-      }
-    }
 
     &__body{
       display: flex;
