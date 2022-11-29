@@ -23,6 +23,7 @@ export default {
 
 <style lang="scss" scoped>
   .main-nav{
+    width: fit-content;
 
     @media screen and (max-width: 1155px) {
       font-size: .8rem;

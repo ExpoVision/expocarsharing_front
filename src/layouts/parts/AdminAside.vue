@@ -60,8 +60,8 @@ export default {
         @include flex-sb-c;
         flex-direction: column;
         min-height: 100vh;
+        height: fit-content;
         width: 25%;
-        
 
         &__top{
           @include flex-fs-c;
