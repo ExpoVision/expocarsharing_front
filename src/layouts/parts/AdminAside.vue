@@ -21,7 +21,7 @@
           <ui-btn 
             width="100%" 
             padding="1em"
-            @click="this.$router.push(item.to)"
+            @click="this.$router.push('/admin' + item.to)"
           >{{item.label}}</ui-btn>
         </li>
       </ul>

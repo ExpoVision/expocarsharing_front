@@ -40,7 +40,7 @@ export default {
     },
     methods: {
       toAdminPanel(){
-        this.$router.push({name: 'carsharingstatus'})
+        this.$router.push({name: 'AdminCarsharingStatus'})
       },
       toggleMobileMenu(){
         this.isActive = !this.isActive
