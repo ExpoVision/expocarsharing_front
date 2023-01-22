@@ -16,7 +16,10 @@
         <section class="terms__filters">
             <div class="wrapper">
                 <h2 class="heading">Cвободные<br> машины</h2>
-                <UiFilters />
+                <FiltersComponent 
+                    @applyFilters="onApplyFilters"
+                    @resetFilters="onResetFilters"
+                />
             </div>
         </section>
         <PaymentSection />
@@ -27,16 +30,18 @@
   
   <script>
 import FeedbackSection from '@/modules/Landing/Sections/FeedbackSection.vue'
-import UiFilters from '@/components/ui/UiFilters.vue'
+import FiltersComponent from '@landing/components/FiltersComponent.vue'
 import FaqComponent from '@/modules/Landing/Sections/FaqSection.vue'
 import PaymentSection from '@/modules/Landing/Sections/PaymentSection.vue'
+import { useStore } from 'vuex'
 
   export default {
     name: 'CatalogView',
-    components: { UiFilters, FeedbackSection, FaqComponent, PaymentSection },
-    data() {
-      return {
-        cars: [
+    components: { FiltersComponent, FeedbackSection, FaqComponent, PaymentSection },
+    setup() {
+        const store = useStore()
+
+        const cars = [
             {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
             {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
             {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
@@ -44,7 +49,20 @@ import PaymentSection from '@/modules/Landing/Sections/PaymentSection.vue'
             {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
             {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
         ]
-      }
+
+        const onApplyFilters = filters => {
+            store.dispatch('carsharing/fetchCars', filters.value)
+        }
+
+        const onResetFilters = () => {
+            store.dispatch('carsharing/fetchCars')
+        }
+        return {
+            cars,
+
+            onApplyFilters, 
+            onResetFilters,
+        }
     }
   }
   </script>
