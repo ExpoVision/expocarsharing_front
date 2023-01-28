@@ -26,8 +26,8 @@
             <div v-else-if="type == 'testimonials'" class="slider__items" ref="slider">
                 <div 
                     class="slider__item"
-                    v-for="(testimonial, index) in elements"
-                    :key="index"
+                    v-for="testimonial in elements"
+                    :key="testimonial.id"
                 >
                     <TestimonialComponent :testimonial="testimonial"/>
                 </div>
