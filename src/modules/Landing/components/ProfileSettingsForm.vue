@@ -2,7 +2,7 @@
     <div class="profile__card">
         <h2>{{title}}</h2>
         <div class="profile__card-content">
-            <form action="profile__settings-form">
+            <form action="profile__settings-form" @submit.prevent="$emit('onSubmit')">
                 <slot></slot>
                 <ui-btn type="submit">{{btnTitle}}</ui-btn>
             </form>
@@ -14,8 +14,7 @@
   import UiBtn from '@/components/ui/UiBtn.vue'
   
   export default {
-    name: 'ProfileView',
-    components: { UiBtn, },
+    components: { UiBtn },
     props: {
         title: String,
         btnTitle: {

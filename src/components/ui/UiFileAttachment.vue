@@ -7,7 +7,11 @@
                 <img v-else src="@/assets/img/icons/file.svg" alt="">
                 {{placeholderTip}}
             </div>
-            <input type="file" />
+            <input 
+                type="file"  
+                accept="image/*"
+                @change="$emit('handleFileChange', $event.target.files[0])"
+            />
         </div>
     </label>
 </template>
@@ -15,6 +19,9 @@
 <script>
 export default {
     props: {
+        modelValue: {
+            type: File
+        },
         isPhotoAttachment: {
             type: Boolean,
             requied: false,
@@ -24,7 +31,7 @@ export default {
           required: false,
         },
         placeholderTip: String,
-    },
+    }
 }
 </script>
 
