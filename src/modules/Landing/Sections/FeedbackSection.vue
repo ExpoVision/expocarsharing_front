@@ -3,12 +3,23 @@
       <div class="wrapper">
         <h2 class="feedback__heading">Остались вопросы?</h2>
         <p class="feedback__text">Оставьте заявку и мы свяжемся с вами</p>
-        <form action="" class="feedback__form">
-          <ui-input type="text" placeholder="Ваше Имя" width="362px"></ui-input>
-          <ui-input type="text" placeholder="+ 7 ___ ___ - __ - __" width="362px"></ui-input>
+        <form class="feedback__form" @submit.prevent="sendFeedback">
+          <ui-input 
+            type="text" 
+            v-model="formData.name"
+            placeholder="Ваше Имя" 
+          ></ui-input>
+          <ui-input 
+            type="text" 
+            v-model="formData.phoneNumber"
+            placeholder="+ 7 ___ ___ - __ - __" 
+          ></ui-input>
           <ui-btn>Оставить заявку</ui-btn>
         </form>
-        <p class="feedback__personal-data">Нажимая кнопку «Оставить заявку», вы даете согласие на обработку своих персональных данных в соответствии со статьей 9 Федерального закона от 27 июля 2006 г. № 152-ФЗ «О персональных данных»</p>
+        <p class="feedback__personal-data">Нажимая кнопку «Оставить заявку», вы даете согласие 
+          на обработку своих персональных данных в соответствии со статьей 9 Федерального 
+          закона от 27 июля 2006 г. № 152-ФЗ «О персональных данных»
+        </p>
       </div>
     </section>
   </template>
@@ -16,10 +27,32 @@
   <script>
   import UiInput from '@/components/ui/UiInput.vue'
   import UiBtn from '@/components/ui/UiBtn.vue'
+import { ref } from 'vue'
+import { useStore } from 'vuex'
   
   export default {
       name: 'FeedbackSection',
       components: { UiInput, UiBtn },
+      setup() {
+        const store = useStore()
+
+        const name = ref('')
+        
+        const formData = ref({
+          name: '',
+          phoneNumber: ''
+        })
+
+        const sendFeedback = () => {
+          store.dispatch('sendFeedback', formData.value)
+        }
+
+        return {
+          formData,
+          name,
+          sendFeedback
+        }
+      }
   }
   </script>
   
@@ -45,14 +78,6 @@
         .ui-input{
           width: 362px;
           margin-right: 1.875em;
-
-          @media screen and (max-width: 1460px) {
-            width: 300px;
-          }
-
-          @media screen and (max-width: 1460px) {
-            width: 270px;
-          }
         }
 
         @media screen and (max-width: 970px) {
