@@ -4,7 +4,7 @@ import ProfileView from '@landing/views/ProfileView.vue'
 import ProfileSettingsView from '@landing/views/ProfileSettingsView.vue'
 import CatalogView from '@landing/views/CatalogView.vue'
 import TermsView from '@landing/views/TermsView.vue'
-import CarsharingView from '@landing/views/CarsharingView.vue'
+import SingleCarView from '@landing/views/SingleCarView.vue'
 
 const landingModuleRoutes = [
     {
@@ -36,12 +36,27 @@ const landingModuleRoutes = [
     },
     {
         path: '/catalog',
-        name: 'Catalog',
-        component: CatalogView,
         meta: {
-            layout: 'LandingLayout',
-            title: 'Каталог'
-        }
+            layout: 'LandingLayout'
+        },
+        children: [
+            {
+                path: '',
+                name: 'Catalog',
+                component: CatalogView,
+                meta: {
+                    title: 'Каталог'
+                },
+            },
+            {
+                path: 'car/:id',
+                name: 'SingleCar',
+                component: SingleCarView,
+                meta: {
+                    title: ''
+                }
+            }
+        ]
     },
     {
         path: '/terms',
@@ -50,15 +65,6 @@ const landingModuleRoutes = [
         meta: {
             layout: 'LandingLayout',
             title: 'Условия'
-        }
-    },
-    {
-        path: '/carsharing',
-        name: 'Carsharing',
-        component: CarsharingView,
-        meta: {
-            layout: 'LandingLayout',
-            title: 'Каршеринг'
         }
     }
 ]
