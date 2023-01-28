@@ -16,19 +16,7 @@
     <SliderSection title="Спорт" :elements="cars" type="cars" />
     <SliderSection title="Luxury" :elements="cars" type="cars" />
 
-    <section class="testimonials">
-      <div class="wrapper">
-        <h2 class="testimonials__heading heading">Отзывы<br> наших<br> клиентов</h2>
-        <TestimonialsList :testimonials="testimonials"></TestimonialsList>
-        <a href="#" class="testimonials__more-link">загрузить еще</a>
-      </div>
-      <SliderSection 
-        v-if="showTestimonialsSlider" 
-        title="Отзывы наших клиентов" 
-        :elements="testimonials" 
-        type="testimonials" 
-      />
-    </section>
+    <TestimonialsSection />
     <FaqSection />
     <FeedbackSection />
   </main>
@@ -36,62 +24,39 @@
 
 <script>
 import UiBtn from '@/components/ui/UiBtn.vue'
-import FeedbackSection from '@/modules/Landing/Sections/FeedbackSection.vue'
 import SliderSection from '@/modules/Landing/Sections/SliderSection.vue'
+import TestimonialsSection from '@landing/Sections/TestimonialsSection.vue'
 import FaqSection from '@/modules/Landing/Sections/FaqSection.vue'
-import TestimonialsList from '@/modules/Landing/components/TestimonialsList.vue'
+import FeedbackSection from '@/modules/Landing/Sections/FeedbackSection.vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { computed, /* onMounted, */ } from 'vue'
 
 
 export default {
   name: 'HomeView',
-  components: { UiBtn, FeedbackSection, SliderSection, FaqSection, TestimonialsList, },
-  data() {
-    return {
-      cars: [
-        {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-        {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-        {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-        {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-        {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-        {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-      ],
-      testimonials: [
-        { text: "Хочу выразить огромную благодарность сотрудникам автосалона находящихся по адресу: г. Москва ул. Красного Маяка 16, а именно менеджеру по запчастям Артему и мастеру по ремонту Павлу за их качество обслуживания, вежливость, отзывчивость, искреннее внимание к клиенту и оперативность. У нас была сложная ситуация, так как машина загорелась, сгорела проводка и другие запчасти. Обращались в разные автосалоны но безрезультатно. А вот с их стороны все запчасти нашли сразу, не было никаких навязчивых предложений о дополнительных опциях в машину, все общение было на профессиональном уровне, ничего лишнего. Машину отремонтировали быстро и качественно. Большое СПАСИБО )",
-          author: 'Михаил Сметанин',
-          authorPosition: 'Директор в Wellness Park'
-        },
-        { text: "Хочу выразить огромную благодарность сотрудникам автосалона находящихся по адресу: г. Москва ул. Красного Маяка 16, а именно менеджеру по запчастям Артему и мастеру по ремонту Павлу за их качество обслуживания, вежливость, отзывчивость, искреннее внимание к клиенту и оперативность. У нас была сложная ситуация, так как машина загорелась, сгорела проводка и другие запчасти. Обращались в разные автосалоны но безрезультатно. А вот с их стороны все запчасти нашли сразу, не было никаких навязчивых предложений о дополнительных опциях в машину, все общение было на профессиональном уровне, ничего лишнего. Машину отремонтировали быстро и качественно. Большое СПАСИБО )",
-          author: 'Михаил Сметанин',
-          authorPosition: 'Директор в Wellness Park'
-        },
-        { text: "Хочу выразить огромную благодарность сотрудникам автосалона находящихся по адресу: г. Москва ул. Красного Маяка 16, а именно менеджеру по запчастям Артему и мастеру по ремонту Павлу за их качество обслуживания, вежливость, отзывчивость, искреннее внимание к клиенту и оперативность. У нас была сложная ситуация, так как машина загорелась, сгорела проводка и другие запчасти. Обращались в разные автосалоны но безрезультатно. А вот с их стороны все запчасти нашли сразу, не было никаких навязчивых предложений о дополнительных опциях в машину, все общение было на профессиональном уровне, ничего лишнего. Машину отремонтировали быстро и качественно. Большое СПАСИБО )",
-          author: 'Михаил Сметанин',
-          authorPosition: 'Директор в Wellness Park'
-        }
-      ],
-      showTestimonialsSlider: false
-    }
-  },
-  methods: {
-    toCatalog() {
-      this.$router.push({name: 'Catalog'})
-    },
-    toggleTestimonialsView() {
-      if (window.innerWidth <= 768) {
-        this.showTestimonialsSlider = true
-      } else {
-        this.showTestimonialsSlider = false
-      }
-    }
-  },
-  created() {
-    window.addEventListener('resize', this.onResize)
-    this.toggleTestimonialsView()
-  },
+  components: { UiBtn, FeedbackSection, SliderSection, FaqSection, TestimonialsSection },
+  setup(){
+    const store = useStore()
+    const router = useRouter()
 
-  beforeUnmount() {
-    window.removeEventListener('resize', this.onResize)
-  },
+    const cars = computed(() => store.getters['carhsarin/getCars'])
+
+    const toCatalog = () => {
+      router.push({name: 'Catalog'})
+    }
+
+    //BackFlag - uncomment
+   /*  onMounted(() => {
+      store.dispatch('fetchFaqItems')
+    }) */
+
+    return {
+      cars,
+      toCatalog,
+    }
+  }
+  
 }
 </script>
 
@@ -145,57 +110,6 @@ export default {
         left: 10%;
         font-size: .8rem;
         gap: 1.3em;
-      }
-    }
-  }
-
-  .testimonials{
-    padding: 3.562em 0;
-    background: url('@/assets/img/testimonials_bg.png') no-repeat top right;
-
-    @media screen and (max-width: 768px){
-      padding-bottom: 15em;
-      background-position: bottom center;
-      background-size: 100%;
-        
-      .wrapper{
-        display: none;
-      }
-    }
-
-    &__heading{
-      color: $purple-dark;
-      margin-bottom: .635em;
-    }
-
-    &__more-link{
-      width: 140px;
-      display: block;
-      margin: auto;
-      padding-bottom: .5em;
-      border-bottom: 1px solid $purple;
-      color: $purple;
-      font-weight: 500;
-      text-align: center;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: .3s;
-
-      &:hover, &:active{
-        color: $lilac;
-        border-color: $lilac;
-      }
-
-      @media screen and (max-width: 865px){
-        display: none;
-      }
-    }
-
-    &__slider{
-      display: none;
-
-      @media screen and (max-width: 865px){
-        display: block;
       }
     }
   }

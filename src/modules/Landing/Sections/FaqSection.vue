@@ -3,10 +3,13 @@
       <div class="wrapper">
         <h2 class="faq__heading heading">Часто<br> задаваемые<br> вопросы</h2>
         <div class="faq__list">
-          <DropdownComponent title="Можно ли вывозить автомобиль за черту города, в котором он был арендован?">{{answer}}</DropdownComponent>
-          <DropdownComponent title="Можно ли вывозить автомобиль за черту города, в котором он был арендован?">{{answer}}</DropdownComponent>
-          <DropdownComponent title="Можно ли вывозить автомобиль за черту города, в котором он был арендован?">{{answer}}</DropdownComponent>
-          <DropdownComponent title="Можно ли вывозить автомобиль за черту города, в котором он был арендован?">{{answer}}</DropdownComponent>
+          <DropdownComponent
+            v-for="item in faqItems"
+            :key="item.id"
+            :title="item.question"
+          >
+            {{item.answer}}
+          </DropdownComponent>
         </div>
       </div>
     </section>
@@ -14,6 +17,8 @@
 
 <script>
 import DropdownComponent from '@/components/DropdownComponent.vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
     name: 'FaqSection',
@@ -22,6 +27,15 @@ export default {
         return {
             answer: "В более расширенном современном определении, появившемся с развитием электроники, машиной является технический объект, состоящий из взаимосвязанных функциональных частей (деталей, узлов, устройств, механизмов и др.), использующий энергию для выполнения возложенных на него функций[2]. В этом понимании машина может и не содержать механически движущихся частей. Примером таких устройств служат электронно-вычислительная машина (компьютер), электрический трансформатор[1].",
         }
+    },
+    setup() {
+      const store = useStore()
+
+      const faqItems = computed(() => store.getters.getFaqItems)
+
+      return {
+        faqItems
+      }
     }
 }
 </script>
