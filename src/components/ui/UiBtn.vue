@@ -57,6 +57,7 @@ export default {
         text-transform: uppercase;
         font-size: 1rem;
         cursor: pointer;
+        white-space: nowrap;
         transition: .3s;
 
         &:hover, &:active {

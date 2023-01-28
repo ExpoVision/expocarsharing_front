@@ -12,20 +12,24 @@
       class="ui-input ui-input--single"
       :type="type"
       :placeholder="placeholder"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
     />
   </template>
   
   <script>
   export default {
     props: {
+      modelValue: [String, Number, null],
+      type: String,
+      placeholder: String,
+      width: String,
+      label: {
         type: String,
-        placeholder: String,
-        width: String,
-        label: {
-          type: String,
-          required: false,
-        }
+        required: false,
+      }
     },
+    emits: ['update:modelValue']
   }
   
   </script>
@@ -53,9 +57,7 @@
         @media screen and (max-width: 970px) {
 
           input{
-            width: 100%;/* 
-            margin-right: 0;
-            margin-bottom: 13px; */
+            width: 100%;
           }
         }
     }
