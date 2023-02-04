@@ -1,34 +1,51 @@
 <template>
     <h1>Пользователи</h1>
-    <input type="text" placeholder="Поиск (все)" class="users-search-input" v-model="search" @input="searchUser()" />
+    <input 
+        type="text" 
+        placeholder="Поиск (все)" 
+        class="users-search-input" 
+        v-model="search" 
+        @input="searchUser()" 
+    />
     <ul class="users-list">
         <li 
             class="users-list__item"
             v-for="user in users"
             :key="user.id"
-        ><router-link :to="{name: 'AdminUserProfile', params: {id: user.id}}">{{user.fullName}}</router-link></li>
+        ><router-link :to="{
+            name: 'AdminUserProfile', 
+            params: {id: user.id}}"
+        >{{user.fullName}}</router-link></li>
     </ul>
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { ref, computed, onMounted } from 'vue'
+
 export default {
-    data() {
-        return {
-            searchResult: [],
-            search: ''
+    setup() {
+        const store = useStore()
+
+        const searchResult = ref([])
+        const search = ref('')
+
+        const usersTotal = computed(() => store.getters['admin/getUsers'])
+        const users = computed(() => search.value ? searchResult.value : usersTotal.value)
+
+        const searchUser = () => {
+            searchResult.value = usersTotal.value.filter(user => {
+                user.fullName.toLowerCase().includes(this.search.toLowerCase())
+            })
         }
-    },
-    computed: {
-        usersTotal() {
-            return this.$store.getters.getUsers
-        },
-        users() {
-            return this.search ? this.searchResult : this.usersTotal
-        },
-    },
-    methods: {
-        searchUser() {
-            this.searchResult = this.usersTotal.filter(user => user.fullName.toLowerCase().includes(this.search.toLowerCase()))
+
+        onMounted(() => {
+            store.dispatch('admin/fetchUsers')
+        })
+
+        return {
+            users,
+            searchUser
         }
     }
 }

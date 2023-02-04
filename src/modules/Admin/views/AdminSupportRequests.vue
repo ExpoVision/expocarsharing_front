@@ -3,7 +3,7 @@
   <div class="support">
     <div class="support-tabs">
         <UiBtn width="165px" padding="1em" type="white" @click="showArchive = false">Необработанные</UiBtn>
-        <UiBtn width="165px" padding="1em" type="white" @click="showArchive = true">Архив</UiBtn>
+        <UiBtn width="165px" padding="1em" type="white" @click="switchToArchive">Архив</UiBtn>
     </div>
     <ul class="support-requests-list">
         <li 
@@ -14,7 +14,7 @@
                 <div>{{request.user.fullName}}</div>
                 <div>{{request.user.phoneNumber}}</div>
             </div>
-            <UiBtn width="165px" padding="1em" type="white" @click="complete">Готово</UiBtn>
+            <UiBtn width="165px" padding="1em" type="white" @click="complete(request.id)">Готово</UiBtn>
         </li>
     </ul>
   </div>
@@ -22,27 +22,45 @@
 
 <script>
 import UiBtn from '@/components/ui/UiBtn.vue'
+import { computed, ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
     components: { UiBtn },
-    data() {
+    setup() {
+        const store = useStore()
+        const archivalSupportRequests = computed(() => {
+            return store.getters['admin/getArchivalSupportRequests']
+        })
+        const pendingSupportRequests = computed(() => {
+            return store.getters['admin/getPendingSupportRequests']
+        })
+
+        onMounted(() => {
+            store.dispatch('admin/fetchPendingSupportRequests')
+        })
+        
+        const showArchive = ref(false)
+        const supportRequestsList = computed(() => {
+            return showArchive.value
+                    ? archivalSupportRequests
+                    : pendingSupportRequests
+        })
+
+        const complete = requestId => {
+            store.dispatch('admin/completeSupportRequest', requestId)
+        }
+
+        const switchToArchive = () => {
+            store.dispatch('admin/fetchArchivalSupportRequests')
+            showArchive.value = true
+        }
+
         return {
-            showArchive: false
-        }
-    },
-    computed: {
-        supportRequestsFromStore() {
-            return this.$store.getters.getSupportRequests
-        },
-        supportRequestsByStatus() {
-            return this.showArchive 
-                    ? this.supportRequestsFromStore.filter(request => request.status == 'completed')
-                    : this.supportRequestsFromStore.filter(request => request.status == 'pending')
-        }
-    },
-    methods: {
-        complete() { 
-            //
+            showArchive,
+            supportRequestsList,
+            switchToArchive,
+            complete
         }
     }
 }
