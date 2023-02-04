@@ -92,7 +92,7 @@ export default {
             prices: [],
             types: [],
             colors: [],
-            sortBy: 'by_ascending'
+            sortBy: sort.value
         }
 
         const filters = ref({...INITIAL_FILTERS})
@@ -208,6 +208,7 @@ export default {
 
             &:hover, &:active{
                 border-color: $purple;
+                color: $purple;
             }
 
             &--reset{

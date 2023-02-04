@@ -3,36 +3,68 @@
     <h2>Добавление</h2>
     <form action="">
         <div class="selects">
-            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks.mark"/>
-            <UiSelectCheckboxes title="Модель" :blocks="filterBlocks.model"/>
-            <UiInput placeholder="Кузов" />
-            <UiSelectCheckboxes title="Цвет" :blocks="filterBlocks.colors"/>
-            <UiInput placeholder="Мощность" />
-            <UiInput placeholder="Стоимость" />
-            <UiSelectCheckboxes title="Тип" :blocks="filterBlocks.type"/>
-            <UiInput placeholder="Год" />
+            <UiSelect
+                title="Марка" 
+                :options="brandsDictionary"
+                @change="(...args) => onSelectChange('brand', ...args)"
+            />
+            <UiSelect
+                title="Модель" 
+                :options="modelsDictionary"
+                @change="(...args) => onSelectChange('model', ...args)"
+            />
+            <UiSelect
+                title="Кузов" 
+                :options="typesDictionary"
+                @change="(...args) => onSelectChange('type', ...args)"
+            />
+            <UiSelect
+                title="Цвет" 
+                :options="colorsDictionary"
+                @change="(...args) => onSelectChange('color', ...args)"
+            />
+            <UiInput placeholder="Мощность" v-model="carProperties.power" />
+            <UiInput placeholder="Стоимость" v-model="carProperties.price" />
+            <UiInput placeholder="Год" v-model="carProperties.year" />
         </div>
         <UiFileAttachment label="Фото" placeholderTip="Загрузить изображение"/>
-        <UiBtn type="white" @click="addCar" width="100%">Добавить</UiBtn>
+        <UiBtn type="white" @click="onAddCar" width="100%">Добавить</UiBtn>
     </form>
   </div>
   <div class="delete-block">
     <h2>Удаление</h2>
-    <form action="">
-        <div class="selects">
-            <UiSelectCheckboxes title="Марка" :blocks="filterBlocks.mark"/>
-            <UiSelectCheckboxes title="Модель" :blocks="filterBlocks.model"/>
+    <form>
+        <div class="selects filters">
+            <UiFilterSelect 
+                title="Марка" 
+                :items="brandsDictionary"
+                v-model="filters.brands"
+            />
+            <UiFilterSelect 
+                title="Модель" 
+                :items="modelsDictionary" 
+                :isBlocks="true"
+                v-model="filters.models"
+            />
+            <button 
+                class="filters__btn filters__btn--apply" 
+                @click="onApplyFilters"
+            >Применить фильтры</button>
+            <button 
+                class="filters__btn filters__btn--reset" 
+                @click="onResetFilters"
+            >Сбросить фильтры</button>
         </div>
         <div class="cars">
             <CarComponent 
-                v-for="car in allCars"
+                v-for="car in cars"
                 :key="car.id"
                 :car="car" size="small" 
                 @click="event => selectCar(event, car.id)"
             />
         </div>
         
-        <UiBtn type="white" @click="deleteCar" width="100%">Удалить</UiBtn>
+        <UiBtn type="white" @click="onDeleteCar" width="100%">Удалить</UiBtn>
     </form>
   </div>
 </template>
@@ -41,41 +73,113 @@
 import UiBtn from '@/components/ui/UiBtn.vue'
 import UiInput from '@/components/ui/UiInput.vue'
 import UiFileAttachment from '@/components/ui/UiFileAttachment.vue'
-import UiSelectCheckboxes from '@/components/ui/UiSelectCheckboxes.vue'
+import UiSelect from '@/components/ui/UiSelect.vue'
+import UiFilterSelect from '@/components/ui/UiFilterSelect.vue'
 import CarComponent from '@/components/CarComponent.vue'
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
-    components: { UiInput, UiFileAttachment, UiBtn, UiSelectCheckboxes, CarComponent },
-    data() {
-        return {
-            filters: {
-                mark: '',
-                model: ''
-            },
-            selectedCarId: null
+    components: { UiInput, UiFileAttachment, UiBtn, UiSelect, UiFilterSelect, CarComponent },
+    setup() {
+        const store = useStore()
+
+        // добавление
+        const carProperties = ref({
+            brand: '',
+            model: '',
+            type: '',
+            color: '',
+            power: '',
+            price: '',
+            year: '',
+        })
+
+        const onSelectChange = (key, newValue) => {
+            carProperties.value[key] = newValue
         }
-    },
-    computed: {
-        filterBlocks() {
-            return this.$store.getters.getFiltersBlocks
-        },
-        allCars() {
-            return this.$store.getters.getCars
-        },
-        // filteredCars() {}
-    },
-    methods: {
-        selectCar(event, id) {
-            this.selectedCarId = id
+
+        const formData = new FormData()
+
+        onMounted(() => {
+            store.dispatch('carsharing/fetchCars')/* 
+            store.dispatch('carsharing/fetchBrandsDictionary')
+            store.dispatch('carsharing/fetchModelsDictionary')
+            store.dispatch('carsharing/fetchTypesDictionary')
+            store.dispatch('carsharing/fetchColorsDictionary') */
+        })
+
+        const brandsDictionary = computed(() => store.getters['carsharing/getBrandsDictionary'])
+        const modelsDictionary = computed(() => store.getters['carsharing/getModelsDictionary'])
+        const typesDictionary = computed(() => store.getters['carsharing/getTypesDictionary'])
+        const colorsDictionary = computed(() => store.getters['carsharing/getColorsDictionary'])
+
+        const cars = computed(() => store.getters['carsharing/getCars'])
+
+        const onMediaUpload = files => {
+            for (let i = 0; i < files.length; i++) {
+                formData.append(files[i].name, files[i])
+            }
+        }
+
+        const onAddCar = () => {
+            Object.keys(carProperties.value).forEach(key => {
+                formData.append(key, carProperties.value[key])
+            })
+            store.dispatch('admin/addNewCar', carProperties)
+            store.dispatch('carsharing/fetchCars')
+        }
+
+        // удаление
+
+        const INITIAL_FILTERS = {
+            brand: '',
+            model: ''
+        } 
+        const filters = ref({...INITIAL_FILTERS})
+        const selectedCarId = ref(null)
+
+        const onSelectCar = (event, id) => {
+            selectedCarId.value = id
             const selectedCar = document.querySelector('.car--selected')
             selectedCar?.classList.remove('car--selected')
             event.currentTarget.classList.add('car--selected')
-        },
-        addCar() {
-            //
-        },
-        deleteCar() {
-            //
+        }
+        
+        const onDeleteCar = () => {
+            if(selectedCarId.value) {
+                store.dispatch('admin/deleteCar', selectedCarId.value)
+                store.dispatch('carsharing/fetchCars')
+            }
+            
+        }
+
+        const onApplyFilters = filters => {
+            store.dispatch('carsharing/fetchCars', filters.value)
+        }
+
+        const onResetFilters = () => {
+            filters.value = {...INITIAL_FILTERS}
+            store.dispatch('carsharing/fetchCars')
+        }
+
+        return {
+            cars,
+            carProperties,
+            brandsDictionary,
+            modelsDictionary,
+            typesDictionary,
+            colorsDictionary,
+            filters,
+
+            //methods
+            onSelectChange,
+            onApplyFilters,
+            onResetFilters,
+            onMediaUpload,
+            onSelectCar,
+            onAddCar,
+            onDeleteCar,
         }
     }
 }
@@ -95,7 +199,8 @@ export default {
     .selects {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        align-items: start;
+        grid-template-rows: 2;
+        align-items: center;
         gap: 1.875em;
         margin: 2.375em 0;
 
@@ -105,6 +210,40 @@ export default {
 
         @media screen and (max-width: 768px){
             grid-template-columns: 1fr;
+        }
+
+    }
+
+    .filters{
+
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 2;
+        align-items: start;
+
+        &__btn{
+            background-color: transparent;
+            color: $purple-opacity;
+            border: 1px solid $purple-opacity;
+            padding: 1.5em 2em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: .3s;
+
+            &:hover, &:active{
+                border-color: $purple;
+                color: $purple;
+            }
+
+            &--reset{
+
+                display: flex;
+                justify-content: center;
+
+                img{
+                    margin-right: .875em;
+                }
+            }
         }
     }
 
