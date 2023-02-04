@@ -24,6 +24,7 @@ export default {
 
         .ui-btn{
             text-transform: none;
+            white-space: break-spaces;
         }
     }
 </style>

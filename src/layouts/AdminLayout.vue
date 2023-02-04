@@ -18,8 +18,8 @@ export default {
 
 <style lang="scss">
   .admin__layout{
-    background-image: url('@/assets/img/single_car.png');
-    background-size: cover;
+    background-image: url('@/assets/img/abstract-bg.jpg');
+    background-size: 100% 100%;
   }
   .admin__wrapper{
     display: flex;

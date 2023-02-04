@@ -97,6 +97,7 @@ export default {
         .ui-btn{
           margin-bottom: 1em;
           text-transform: none;
+          white-space: break-spaces;
         }
 
         &__bottom{
