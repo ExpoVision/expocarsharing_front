@@ -1,6 +1,6 @@
 /***  Admin views  ***/
 import AdminCarsharingStatus from '@admin/views/AdminCarsharingStatus.vue'
-import AdminCarsharingInfo from '@admin/views/AdminCarsharingInfo.vue'
+import AdminOrderInfo from '@admin/views/AdminOrderInfo.vue'
 import AdminStatistics from '@admin/views/AdminStatistics.vue'
 import AdminUsers from '@admin/views/AdminUsers.vue'
 import AdminUserProfile from '@admin/views/AdminUserProfile.vue'
@@ -25,11 +25,11 @@ const adminProfileRoutes = [
             component: AdminCarsharingStatus
         },
         {
-            path: 'carsharinginfo/:id',
-            name: 'AdminCarsharingInfo',
-            component: AdminCarsharingInfo,
+            path: 'orderinfo/:id',
+            name: 'AdminOrderInfo',
+            component: AdminOrderInfo,
             meta: {
-            layout: 'AdminLayout'
+                layout: 'AdminLayout'
             }
         },
         {
@@ -37,7 +37,7 @@ const adminProfileRoutes = [
             name: 'AdminStatistics',
             component: AdminStatistics,
             meta: {
-            layout: 'AdminLayout'
+                layout: 'AdminLayout'
             }
         },
         {
@@ -45,7 +45,7 @@ const adminProfileRoutes = [
             name: 'AdminUsers',
             component: AdminUsers,
             meta: {
-            layout: 'AdminLayout'
+                layout: 'AdminLayout'
             }
         },
         {
@@ -53,7 +53,7 @@ const adminProfileRoutes = [
             name: 'AdminUserProfile',
             component: AdminUserProfile,
             meta: {
-            layout: 'AdminLayout'
+                layout: 'AdminLayout'
             }
         },
         {
@@ -61,7 +61,7 @@ const adminProfileRoutes = [
             name: 'AdminSupportRequests',
             component: AdminSupportRequests,
             meta: {
-            layout: 'AdminLayout'
+                layout: 'AdminLayout'
             }
         },
         {
@@ -69,7 +69,7 @@ const adminProfileRoutes = [
             name: 'AdminContent',
             component: AdminContent,
             meta: {
-            layout: 'AdminLayout'
+                layout: 'AdminLayout'
             }
         }
         ]

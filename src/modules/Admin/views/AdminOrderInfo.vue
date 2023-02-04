@@ -5,19 +5,19 @@
         <div class="carsharing__info">
             <div class="carsharing-info-row">
                 <span class="info-title">Статус:</span> 
-                <span>{{statuses[carsharing.status]}}</span>
+                <span>{{statuses[order.status]}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Клиент:</span> 
-                <span>{{carsharing.user.fullName}}</span>
+                <span>{{order.user.fullName}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Адрес:</span> 
-                <span>{{carsharing.address}}</span>
+                <span>{{order.address}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Тел:</span> 
-                <span>{{carsharing.user.phoneNumber}}</span>
+                <span>{{order.user.phoneNumber}}</span>
             </div>
         </div>
     </div>
@@ -26,23 +26,23 @@
             <h3>Данные авто</h3>
             <div class="carsharing-info-row">
                 <span class="info-title">Марка:</span> 
-                <span>{{carsharing.car.mark}}</span>
+                <span>{{order.car.brand}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Двигатель:</span> 
-                <span>{{carsharing.car.engine}}</span>
+                <span>{{order.car.engine}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Г.Номер:</span> 
-                <span>{{carsharing.car.govNumber}}</span>
+                <span>{{order.car.govNumber}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Адрес:</span> 
-                <span>{{carsharing.car.address}}</span>
+                <span>{{order.car.address}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">ID:</span> 
-                <span>{{carsharing.car.id}}</span>
+                <span>{{order.car.id}}</span>
             </div>
         </div>
         <div class="car__map">
@@ -51,25 +51,45 @@
     </div>
 
     <div class="carsharing-bottom">
-        <div v-if="carsharing.status == 'booked'" class="carsharing-bottom__btns">
-            <UiBtn padding="1em" type="white">Повтвердить бронь</UiBtn>
-            <UiBtn padding="1em" type="white">Отменить бронь</UiBtn>
+        <div v-if="order.status == 'booked'" class="carsharing-bottom__btns">
+            <UiBtn
+                padding="1em"
+                type="white"
+                @click="confirmBooking"
+            >Подтвердить бронь</UiBtn>
+            <UiBtn
+                padding="1em"
+                type="white"
+                @click="cancelBooking"
+            >Отменить бронь</UiBtn>
         </div>
-        <div v-if="carsharing.status == 'confirmPayment'" class="carsharing-bottom__btns">
-            <UiBtn padding="1em" type="white">Подтвердить оплату</UiBtn>
-            <UiBtn padding="1em" type="white">Отменить заказ</UiBtn>
+        <div v-if="order.status == 'confirmPayment'" class="carsharing-bottom__btns">
+            <UiBtn
+                padding="1em"
+                type="white"
+                @click="confirmPayment"
+            >Подтвердить оплату</UiBtn>
+            <UiBtn
+                padding="1em"
+                type="white"
+                @click="cancelOrder"
+            >Отменить заказ</UiBtn>
         </div>
-        <div v-if="carsharing.status == 'active'" class="carsharing-bottom__btns">
-            <UiBtn padding="1em" type="white">Принудительное завершение</UiBtn>
+        <div v-if="order.status == 'active'" class="carsharing-bottom__btns">
+            <UiBtn
+                padding="1em"
+                type="white"
+                @click="forceComplete"
+            >Принудительное завершение</UiBtn>
         </div>
-        <div v-if="carsharing.status == 'active' || carsharing.status == 'completed'">
+        <div v-if="order.status == 'active' || order.status == 'completed'">
             <p class="carsharing-info-row">
             <span class="info-title">Время сессии:</span> 
-            <span>{{carsharing.time}}</span>
+            <span>{{order.time}}</span>
             </p>
             <p class="carsharing-info-row">
                 <span class="info-title">Тариф:</span> 
-                <span>{{carsharing.car.price}} руб/мин</span>
+                <span>{{order.car.price}} руб/мин</span>
             </p>
         </div>
     </div>
@@ -77,25 +97,33 @@
 
 <script>
 import UiBtn from '@/components/ui/UiBtn.vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default {
     components: { UiBtn },
-    data() {
-        return {
-            statuses: {
-                'booked': 'Забронирован',
-                'confirmPayment': 'Оплата доставки',
-                'active': 'Активный',
-                'completed': 'Завершен',
-            }
+    setup() {
+        const store = useStore()
+        const route = useRoute()
+
+        const statuses = {
+            'booked': 'Забронирован',
+            'confirmPayment': 'Оплата доставки',
+            'active': 'Активный',
+            'completed': 'Завершен',
         }
-    },
-    computed: {
-        carsharing() {
-            return this.$store.getters['getCarsharingById'](this.$route.params.id)
-        },
-        title() {
-            switch(this.carsharing.status){
+
+        const orderId = route.params.id
+
+        const order = computed(() => {
+            return store.getters['admin/getOrderById'](orderId)
+        })
+
+        console.log(store)
+
+        const title = computed(() =>  {
+            switch(order.value.status){
                 case('booked'):
                     return 'Забронированные авто'
                 case('confirmPayment'):
@@ -107,7 +135,42 @@ export default {
                 default: 
                     return 'Информация'
             }
+        })
+
+        const confirmBooking = () => {
+            store.dispatch('admin/confirmBooking', orderId)
         }
+
+        const cancelBooking = () => {
+            store.dispatch('admin/cancelBooking', orderId)
+        }
+
+        const confirmPayment = () => {
+            store.dispatch('admin/confirmPayment', orderId)
+        }
+
+        const cancelOrder = () => {
+            store.dispatch('admin/cancelOrder', orderId)
+        }
+
+        const forceComplete = () => {
+            store.dispatch('admin/forceComplete', orderId)
+        }
+
+        return {
+            order,
+            title,
+            statuses,
+
+            confirmBooking,
+            cancelBooking,
+            confirmPayment,
+            cancelOrder,
+            forceComplete
+        }
+    },
+    computed: {
+        
     }
 }
 </script>

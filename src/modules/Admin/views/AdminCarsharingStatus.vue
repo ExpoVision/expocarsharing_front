@@ -1,17 +1,22 @@
 <template>
     <h1>Статус каршеринга</h1>
     <AdminNavTab @setStatus="setStatus"/>
-    <div class="cars">
+    <div class="orders">
         <div 
-            class="car-block"
-            v-for="(carsharing, index) in carsharing"
-            :key="index"
+            class="order-block"
+            v-for="order in orders"
+            :key="order.id"
         >
-            <div class="car-block__time">
-                > {{carsharing.car.time}}
+            <div class="order-block__time">
+                {{order.car.time}}
             </div>
-            <CarComponent :car="carsharing.car" size="small" />
-            <UiBtn width="93%" padding="1em" type="white" @click="toCarsharingInfo(carsharing.id)">Посмотреть</UiBtn>
+            <CarComponent :car="order.car" size="small" />
+            <UiBtn 
+                width="93%"
+                padding="1em"
+                type="white"
+                @click="toCarsharingInfo(order.id)"
+            >Посмотреть</UiBtn>
         </div>
     </div>
 </template>
@@ -20,32 +25,51 @@
 import CarComponent from '@/components/CarComponent.vue'
 import AdminNavTab from '@/modules/Admin/components/AdminNavTab.vue'
 import UiBtn from '@/components/ui/UiBtn.vue'
+import { useStore } from 'vuex'
+import { ref, onMounted, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
     components: { AdminNavTab, CarComponent, UiBtn },
-    data() {
+    setup() {
+        const store = useStore()
+        const router = useRouter()
+
+        const status = ref('booked')
+
+        const fetchOrders = ordersStatus => {
+            store.dispatch('admin/fetchOrdersByStatus', ordersStatus)
+        }
+
+        onMounted(() => {
+            fetchOrders(status.value)
+        })
+        
+        const orders = computed(() => {
+            return store.getters['admin/getOrders']
+        })
+
+        const setStatus = newStatus => status.value = newStatus
+
+        watch(status, newVal => {
+            fetchOrders(newVal)
+        })
+
+        const toCarsharingInfo = id => {
+            router.push({name: 'AdminOrderInfo', params: {id}})
+        }
+
         return {
-            status: 'booked'
-        }
-    },
-    methods: {
-        toCarsharingInfo(id) {
-            this.$router.push({name: 'AdminCarsharingInfo', params: {id}})
-        },
-        setStatus(status) {
-            this.status = status
-        }
-    },
-    computed: {
-        carsharing() {
-            return this.$store.getters['getCarsharingsByStatus'](this.status)
+            orders,
+            setStatus,
+            toCarsharingInfo
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .cars {
+    .orders {
         display: grid;
         width: 100%;
         grid-template-columns: repeat(3, 1fr);
@@ -53,7 +77,7 @@ export default {
         column-gap: .7em;
     }
 
-    .car-block{
+    .order-block{
         position: relative;
 
         .ui-btn{
