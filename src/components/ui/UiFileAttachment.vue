@@ -31,7 +31,8 @@ export default {
           required: false,
         },
         placeholderTip: String,
-    }
+    },
+    emits: ['handleFileChange']
 }
 </script>
 

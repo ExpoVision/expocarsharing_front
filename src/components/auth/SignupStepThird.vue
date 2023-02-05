@@ -7,24 +7,39 @@
         с использованием средств автоматической, а также неавтоматической обработки данных.
     </p>
     <label class="agreement-label">
-        <input type="checkbox">
+        <input 
+            type="checkbox" 
+            v-model="formModel.persDataAccessment"
+        >
         Я согласен на обработку персональных данных
     </label>
     <ui-btn 
         width="100%" 
         padding="1em"
-        :disabled="isAgree"
-    >Согласен</ui-btn>
+        type="submit"
+        :disabled="!formModel.persDataAccessment"
+    >Зарегистрироваться</ui-btn>
 </template>
 
 <script>
-import UiBtn from '@/components/ui/UiBtn.vue';
-
+import UiBtn from '@/components/ui/UiBtn.vue'
+import { computed } from 'vue'
 export default {
+    props: {
+        modelValue: {
+            type: Object,
+            default: () => ({}),
+        }
+    },
     components: { UiBtn },
-    data() {
+    setup(props, { emit }) {
+        const formModel = computed({ 
+            get: () => props.modelValue,
+            set: (value) => emit('update:modelValue', value),
+        })
+
         return {
-            isAgree: false
+            formModel
         }
     }
 }

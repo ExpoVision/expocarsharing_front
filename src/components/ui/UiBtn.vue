@@ -74,5 +74,10 @@ export default {
             border: 1px solid $purple;
           }
         }
+
+        &[disabled]{
+          background-color: gray;
+          cursor: not-allowed;
+        }
     }
 </style>

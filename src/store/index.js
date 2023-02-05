@@ -5,6 +5,7 @@ import { faqItems, testimonials } from './mocks'
 
 import carsharing from '@/store/modules/carsharing'
 import admin from '@/store/modules/admin'
+import user from '@/store/modules/user'
 
 axios.defaults.baseURL = 'http://expocarsharing.localhost/api';
 
@@ -63,6 +64,7 @@ export default createStore({
     },
     modules: {
         carsharing,
-        admin
+        admin,
+        user
     },
 })
