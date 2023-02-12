@@ -7,11 +7,18 @@ import AdminUserProfile from '@admin/views/AdminUserProfile.vue'
 import AdminSupportRequests from '@admin/views/AdminSupportRequests.vue'
 import AdminContent from '@admin/views/AdminContent.vue'
 
+import isAuth from '@/router/isAuth'
+import isAdmin from '@/router/isAdmin'
+
 const adminProfileRoutes = [
     {
         path: '/admin',
         meta: {
-            layout: 'AdminLayout'
+            layout: 'AdminLayout',
+            middleware: [
+                isAuth,
+                isAdmin
+            ]
         },
         children: [
         {
@@ -75,5 +82,6 @@ const adminProfileRoutes = [
         ]
     }
 ]
+
 
 export default adminProfileRoutes

@@ -6,6 +6,8 @@ import CatalogView from '@landing/views/CatalogView.vue'
 import TermsView from '@landing/views/TermsView.vue'
 import SingleCarView from '@landing/views/SingleCarView.vue'
 
+import isAuth from '@/router/isAuth'
+
 const landingModuleRoutes = [
     {
         path: '/',
@@ -22,7 +24,10 @@ const landingModuleRoutes = [
         component: ProfileView,
         meta: {
             layout: 'ProfileLayout',
-            title: 'Профиль'
+            title: 'Профиль',
+            middleware: [
+                isAuth
+            ]
         }
     },
     {
@@ -31,7 +36,10 @@ const landingModuleRoutes = [
         component: ProfileSettingsView,
         meta: {
             layout: 'ProfileLayout',
-            title: 'Профиль'
+            title: 'Профиль',
+            middleware: [
+                isAuth
+            ]
         }
     },
     {
