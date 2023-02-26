@@ -62,7 +62,7 @@ export default {
         async deleteUser({ dispatch }, payload) {
             try {
                 const userId = payload
-                await axios.post('endpoint', userId)
+                await axios.delete('endpoint', userId)
                 dispatch('fetchUsers')
             } catch (e) {
                 console.log(e)
@@ -132,7 +132,7 @@ export default {
         async confirmPayment({ dispatch }, payload) {
             try {
                 const orderId = payload
-                await axios.post('endpoint', orderId)
+                await axios.post('/order-process/confirmPayment', orderId)
                 dispatch('fetchOrders')
             } catch (e) {
                 console.log(e)
@@ -165,7 +165,7 @@ export default {
         },
         async deleteCar(_, carId) {
             try {
-                await axios.post('endpoint', carId)
+                await axios.delete('/vehicle', carId)
             } catch (e) {
                 console.log(e)
             }

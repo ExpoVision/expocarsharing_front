@@ -33,16 +33,19 @@ export default {
         // BackFlag заменить endpoints
         async login({ commit }, payload) {
             try {
-                const { data } = await axios.post('endpoint', payload)
-                commit('setToken', data.access_token);
+                const { data } = await axios.post('/login', payload)
+                commit('setToken', data.token);
             } catch (e) {
                 console.log(e)
             }
         },
         async signup({ commit }, payload) {
             try {
-                const { data } = await axios.post('endpoint', payload)
-                commit('setToken', data.access_token)
+                const headers = {
+                    'Content-Type': 'multipart/form-data',
+                }
+                const { data } = await axios.post('/register', payload, headers)
+                commit('setToken', data.token)
             } catch (e) {
                 console.log(e)
             }
