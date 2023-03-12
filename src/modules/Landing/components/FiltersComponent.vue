@@ -1,42 +1,36 @@
 <template>
    <form class="filters">
         <div class="filters__selects">
-            <div class="filters__selects-area">
-                <UiFilterSelect 
-                    title="Марка" 
-                    :items="brandsDictionary"
-                    v-model="filters.brands"
-                />
-                <UiFilterSelect 
-                    title="Модель" 
-                    :items="modelsDictionary" 
-                    :isBlocks="true"
-                    v-model="filters.models"
-                />
-                <UiFilterSelect 
-                    title="Цена" 
-                    :items="pricesDictionary" 
-                    type="single-column"
-                    v-model="filters.prices" 
-                />
-                <UiFilterSelect 
-                    title="Тип" 
-                    :items="typesDictionary" 
-                    v-model="filters.types"
-                />
-                <UiFilterSelect 
-                    title="Цвет" 
-                    :items="colorsDictionary" 
-                    v-model="filters.colors"
-                />
-                <button class="filters__btn filters__btn--reset" @click="resetFilters">
-                    <img src="@/assets/img/icons/cross-purple.svg" alt=""
-                    > Сбросить всё</button>
-            </div>
+            <UiFilterSelect 
+                title="Марка" 
+                :items="filtersDictionaries.brands"
+                v-model="filters.brands"
+            />
+            <UiFilterSelect 
+                title="Цена" 
+                :items="pricesDictionary" 
+                type="single-column"
+                v-model="filters.prices" 
+            />
+            <!-- <UiFilterSelect 
+                title="Тип" 
+                :items="typesDictionary" 
+                v-model="filters.types"
+            /> -->
+            <UiFilterSelect 
+                title="Цвет" 
+                :items="filtersDictionaries.colors" 
+                v-model="filters.colors"
+            />
             <button 
                 class="filters__btn filters__btn--apply" 
-                @click="applyFilters"
+                @click.prevent="applyFilters"
             >Применить фильтры</button>
+            <button 
+                class="filters__btn filters__btn--reset"
+                @click.prevent="resetFilters">
+                <img src="@/assets/img/icons/cross-purple.svg" alt=""
+            >Сбросить всё</button>
         </div>
         <div class="filters__bottom">
             <div class="found">
@@ -59,24 +53,27 @@ export default {
     components: { UiFilterSelect },
     emits: ['applyFlters', 'resetFilters'],
     setup(_, { emit }) {
+        
         const store = useStore()
-        const brandsDictionary = computed(() => store.getters['carsharing/getBrandsDictionary'])
-        const modelsDictionary = computed(() => store.getters['carsharing/getModelsDictionary'])
+        const filtersDictionaries = computed(() => store.getters['carsharing/getFilterValues'])
         const pricesDictionary = computed(() => store.getters['carsharing/getPricesDictionary'])
-        const typesDictionary = computed(() => store.getters['carsharing/getTypesDictionary'])
-        const colorsDictionary = computed(() => store.getters['carsharing/getColorsDictionary'])
 
-        onMounted(() => {
-            store.dispatch('carsharing/fetchBrandsDictionary')
-            store.dispatch('carsharing/fetchModelsDictionary')
-            store.dispatch('carsharing/fetchPricesDictionary')
-            store.dispatch('carsharing/fetchTypesDictionary')
-            store.dispatch('carsharing/fetchColorsDictionary')
+        // запросить словари для фильтров
+        onMounted(async () => {
+            await store.dispatch('carsharing/fetchFilterValues')  
         })
 
         const SORT_TYPE = {
             'by_ascending': 'по возрастанию цены',
             'by_descending': 'по убыванию цены'
+        }
+
+        // значения для соотношения ключей prices dictionary 
+        const PRICES = {
+            1: [undefined, 10000],
+            2: [10000, 20000],
+            3: [20000, 40000],
+            4: [40000, 80000],
         }
 
         const sort = ref('by_ascending')
@@ -88,7 +85,6 @@ export default {
 
         const INITIAL_FILTERS = {
             brands: [],
-            models: [],
             prices: [],
             types: [],
             colors: [],
@@ -97,21 +93,21 @@ export default {
 
         const filters = ref({...INITIAL_FILTERS})
 
+        // применить фильтры
         const applyFilters = () => {
+            filters.value.prices = filters.value.prices.map(item => PRICES[item])
             emit('applyFilters', filters.value)
         }
 
+        // сбросить фильтры
         const resetFilters = () => {
             filters.value = {...INITIAL_FILTERS}
             emit('resetFilters')
         }
 
         return {
-            brandsDictionary,
-            modelsDictionary,
+            filtersDictionaries,
             pricesDictionary,
-            typesDictionary,
-            colorsDictionary,
             filters,
             SORT_TYPE,
             sort,
@@ -164,38 +160,21 @@ export default {
         &__selects{
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
             align-items: start;
-            grid-template-areas: "selects selects selects"
-                                "selects selects selects"
-                                ". apply .";
             gap: 1.875em;
             margin: 2.375em 0;
 
             @media screen and (max-width: 975px){
                 grid-template-columns: repeat(2, 1fr);
-                grid-template-areas: "selects selects"
-                                    "selects selects"
-                                    "selects selects"
-                                    "apply .";
+                grid-template-rows: repeat(3, 1fr);
             }
 
             @media screen and (max-width: 768px){
                 grid-template-columns: 1fr;
-                grid-template-areas: "selects"
-                                    "selects"
-                                    "selects"
-                                    "selects"
-                                    "selects"
-                                    "selects"
-                                    "apply";
+                grid-template-rows: repeat(6, 1fr);
             }
         }
-
-        &__selects-area{
-            grid-area: selects;
-            display: contents;
-        }
-
         &__btn{
             background-color: transparent;
             color: $purple-opacity;
@@ -219,10 +198,6 @@ export default {
                 img{
                     margin-right: .875em;
                 }
-            }
-
-            &--apply{
-                grid-area: apply;
             }
         }
     }

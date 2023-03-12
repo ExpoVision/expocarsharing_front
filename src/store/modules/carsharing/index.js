@@ -1,36 +1,24 @@
 import axios from "axios"
-import { 
-    brandsDictionary, 
-    modelsDictionary,
-    pricesDictionary,
-    typesDictionary,
-    colorsDictionary
- } from './mocks'
 
 export default {
     namespaced: true,
     state: {
         offers: {},
-        // brandsDictionary: [],
-        brandsDictionary,
-        //modelsDictionary: [],
-        modelsDictionary,
-        //pricesDictionary: [],
-        pricesDictionary,
-        //typesDictionary: [],
-        typesDictionary,
-        //colorsDictionary: [],
-        colorsDictionary
+        offersByClasses: {},
+        filterValues: {},
+        pricesDictionary: {
+            1: 'до 10 000 ₽',
+            2: 'от  10 000 ₽ до 20 000 ₽',
+            3: 'от  20 000 ₽ до 40 000 ₽',
+            4: 'от  40 000 ₽ до 80 000 ₽',
+        },
     },
     getters: {
         getOffers: state => state.offers,
         getOffersByClasses: state => state.offersByClasses.data,
         getOfferById: (_, getters) => id => getters.getOffers.find(offer => offer.id == id),
-        getBrandsDictionary: state => state.brandsDictionary,
-        getModelsDictionary: state => state.modelsDictionary,
-        getPricesDictionary: state => state.pricesDictionary,
-        getTypesDictionary: state => state.typesDictionary,
-        getColorsDictionary: state => state.colorsDictionary,
+        getFilterValues: state => state.filterValues,
+        getPricesDictionary: state => state.pricesDictionary
     },
     mutations: {
         setOffers(state, payload) {
@@ -39,20 +27,8 @@ export default {
         setOffersByClasses(state, payload) {
             state.offersByClasses = payload
         },
-        setBrandsDictionary(state, payload) {
-            state.brandsDictionary = payload
-        },
-        setModelsDictionary(state, payload) {
-            state.modelsDictionary = payload
-        },
-        setPricesDictionary(state, payload) {
-            state.pricesDictionary = payload
-        },
-        setTypesDictionary(state, payload) {
-            state.typesDictionary = payload
-        },
-        setColorsDictionary(state, payload) {
-            state.colorsDictionary = payload
+        setFilterValues(state, payload) {
+            state.filterValues = payload
         },
     },
     actions: {
@@ -73,49 +49,18 @@ export default {
                 console.log(e)
             }
         },
-        async fetchBrandsDictionary({ commit }) {
+        async fetchFilterValues({ commit }) {
             try {
-                const response = await axios.get('endpoint')
-                commit('setBrandsDictionary', response.data);
+                const response = await axios.get('/filter-values')
+                commit('setFilterValues', response.data)
             } catch (e) {
                 console.log(e)
             }
         },
-        async fetchModelsDictionary({ commit }) {
-            try {
-                const response = await axios.get('endpoint')
-                commit('setModelsDictionary', response.data);
-            } catch (e) {
-                console.log(e)
-            }
-        },
-        async fetchPricesDictionary({ commit }) {
-            try {
-                const response = await axios.get('endpoint')
-                commit('setPricesDictionary', response.data);
-            } catch (e) {
-                console.log(e)
-            }
-        },
-        async fetchTypesDictionary({ commit }) {
-            try {
-                const response = await axios.get('endpoint')
-                commit('setTypesDictionary', response.data);
-            } catch (e) {
-                console.log(e)
-            }
-        },
-        async fetchColorsDictionary({ commit }) {
-            try {
-                const response = await axios.get('endpoint')
-                commit('setColorsDictionary', response.data);
-            } catch (e) {
-                console.log(e)
-            }
-        },
+        // address, phone, name, offer_id, userId (?)
         async bookCar(_, payload) {
             try {
-                await axios.post('endpoint', payload)
+                await axios.post(`/order-process/reserv/${payload.carId}`, payload.bookCarData)
             } catch (e) {
                 console.log(e)
             }

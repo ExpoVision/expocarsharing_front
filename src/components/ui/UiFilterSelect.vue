@@ -4,30 +4,7 @@
         <h3 class="filter__title">{{title}}</h3>
         <img class="filter__chevron" src="@/assets/img/icons/arrow-down-purple.svg" alt="" :class="{'filter__chevron--active': isActive}">
       </div>
-      <div v-if="isBlocks" class="filter__body">
-        <div 
-            v-for="(block, index) in items"
-            :key="index"
-            class="filter__block"
-        >
-            <h3 v-if="block.title">{{block.title}}</h3>
-            <div class="filter__checkboxes">
-                <label 
-                    v-for="(item, index) in block.items"
-                    :key="index"
-                >
-                  <input 
-                    type="checkbox"
-                    :value="item.value"
-                    v-model="checkedItems"
-                    @change="$emit('update:modelValue', checkedItems)"
-                  >
-                  <span>{{item.label}}</span>
-                </label>
-            </div>
-        </div>
-      </div>
-      <div v-else class="filter__body">
+      <div class="filter__body">
         <div class="filter__block">
           <div class="filter__checkboxes" :class="{'filter__checkboxes--single-column': type === 'single-column'}">
               <label 
@@ -36,15 +13,14 @@
               >
                   <input 
                       type="checkbox"
-                      :value="item.value"
+                      :value="index"
                       v-model="checkedItems"
                       @change="$emit('update:modelValue', checkedItems)"
                   >
-                  <span>{{item.label}}</span>
+                  <span>{{item}}</span>
               </label>
             </div>
         </div>
-        
       </div>
     </div>
   </template>
@@ -57,12 +33,7 @@ import { ref } from 'vue'
     emits: ['update:modelValue'],
     props: { 
       title: String,
-      items: Array ,
-      isBlocks: {
-        type: Boolean,
-        required: false,
-        default: false
-      },
+      items: Object,
       type: {
         type: String,
         required: false,
@@ -74,7 +45,7 @@ import { ref } from 'vue'
       const toggleActive = () => {
         isActive.value = !isActive.value
       }
-
+      
       const checkedItems = ref([])
       
       return {
@@ -117,6 +88,7 @@ import { ref } from 'vue'
         height: auto;
         max-height: 0;
         transition: .3s;
+        overflow: scroll;
       }
   
       &--active{
@@ -153,7 +125,7 @@ import { ref } from 'vue'
         label{
             display: flex;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items: center;
             width: 45%;
 
             span{
