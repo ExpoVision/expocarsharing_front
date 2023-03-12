@@ -47,6 +47,8 @@ export default {
 
     onMounted(() => {
       store.dispatch('carsharing/fetchOffersByClasses')
+      store.dispatch('fetchFaqItems')
+      store.dispatch('fetchTestimonials')
     })
 
     return {

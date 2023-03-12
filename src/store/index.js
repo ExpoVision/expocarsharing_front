@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { createStore } from 'vuex'
-import { faqItems, testimonials } from './mocks'
 
 import carsharing from '@/store/modules/carsharing'
 import admin from '@/store/modules/admin'
 import user from '@/store/modules/user'
 
 axios.defaults.baseURL = 'http://expocarsharing.localhost/api/v1'
+
 
 axios.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
@@ -17,21 +17,18 @@ axios.interceptors.request.use((config) => {
 
 export default createStore({
     state: {
-         // temp mocks
-        //faqItems: [],
-        faqItems,
-        //testimonials: [],
-        testimonials
+        faqItems: {},
+        testimonials: {}
     },
     getters: {
         getCars: (state) => {
             return state.cars
         },
         getFaqItems: (state) => {
-            return state.faqItems
+            return state.faqItems.data
         },
         getTestimonials: state => {
-            return state.testimonials
+            return state.testimonials.data
         }
     },
     mutations: {
@@ -39,33 +36,32 @@ export default createStore({
             state.faqItems = payload
         },
         setTestimonials(state, payload) {
-            state.faqItems = payload
+            state.testimonials = payload
         },
     },
     actions: {
         async fetchFaqItems({ commit }) {
             try {
-                const { data } = await axios.get('endpoint')
+                const { data } = await axios.get('/faq')
                 commit('setFaqItems', data)
             } catch (e) {
                 console.log(e)
             }
         },
-        async fetchTestimonials(state) {
-            // FrontFlag then catch or try catch
-            await axios.get('endpoint')
-            .then(({data}) => {
-                state.commit('setTestimonials', data)
-            })
-            .catch(e => console.log(e))
-        },
-        async sendFeedback(_, payload) {
+        async fetchTestimonials({ commit }) {
             try {
-                await axios.post('endpoint', payload)
+                const { data } = await axios.get('/review')
+                commit('setTestimonials', data)
             } catch (e) {
                 console.log(e)
             }
-            console.log(payload)
+        },
+        async sendFeedback(_, payload) {
+            try {
+                await axios.post('/feedback', payload)
+            } catch (e) {
+                console.log(e)
+            }
         }
     },
     modules: {

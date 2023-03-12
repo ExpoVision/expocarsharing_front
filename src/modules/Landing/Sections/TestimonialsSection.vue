@@ -9,7 +9,7 @@
                     :testimonial="testimonial"
                 ></testimonial-component >
             </div>
-            <a href="#" class="testimonials__more-link">загрузить еще</a>
+            <a href="" class="testimonials__more-link">загрузить еще</a>
         </div>
         <SliderSection
             v-if="showTestimonialsSlider" 
@@ -30,16 +30,15 @@ export default {
     components: { TestimonialComponent, SliderSection },
     setup() {
         const store = useStore()
-        //FronFlag
+
+        const testimonials = computed(() => store.getters.getTestimonials)
+        
         onMounted(() => {
-            /* store.dispatch('fetchTestimonials') */
-            
             if(window.innerWidth <= 768) {
                 showTestimonialsSlider.value = true
             }
         })
-        const testimonials = computed(() => store.getters.getTestimonials)
-        
+
         const showTestimonialsSlider = ref(false)
         
         const toggleTestimonialsView = () => {
@@ -51,11 +50,10 @@ export default {
         }
 
         window.addEventListener('resize', toggleTestimonialsView)
-
-
         onBeforeUnmount(() => {
             window.removeEventListener('resize', toggleTestimonialsView)
         })
+
         return {
             testimonials,
             showTestimonialsSlider
