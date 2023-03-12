@@ -8,7 +8,15 @@
                 {{placeholderTip}}
             </div>
             <input 
-                type="file"  
+                v-if="multiple"
+                type="file"
+                multiple="multiple"
+                accept="image/*"
+                @change="$emit('handleFileChange', $event.target.files)"
+            />
+            <input 
+                v-else
+                type="file"
                 accept="image/*"
                 @change="$emit('handleFileChange', $event.target.files[0])"
             />
@@ -28,6 +36,10 @@ export default {
         },
         label: {
           type: String,
+          required: false,
+        },
+        multiple: {
+          type: Boolean,
           required: false,
         },
         placeholderTip: String,

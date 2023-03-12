@@ -5,29 +5,35 @@
         <div class="selects">
             <UiSelect
                 title="Марка" 
-                :options="brandsDictionary"
+                :options="filtersDictionaries.brands"
                 @change="(...args) => onSelectChange('brand', ...args)"
             />
-            <UiSelect
+            <UiSelect 
                 title="Модель" 
-                :options="modelsDictionary"
+                :items="filtersDictionaries.brandModels" 
                 @change="(...args) => onSelectChange('model', ...args)"
             />
             <UiSelect
                 title="Кузов" 
-                :options="typesDictionary"
+                :options="filtersDictionaries.type"
                 @change="(...args) => onSelectChange('type', ...args)"
             />
             <UiSelect
                 title="Цвет" 
-                :options="colorsDictionary"
+                :options="filtersDictionaries.colors"
                 @change="(...args) => onSelectChange('color', ...args)"
             />
             <UiInput placeholder="Мощность" v-model="carProperties.power" />
             <UiInput placeholder="Стоимость" v-model="carProperties.price" />
             <UiInput placeholder="Год" v-model="carProperties.year" />
+            <UiInput placeholder="Гос. номер" v-model="carProperties.govNumber" />
         </div>
-        <UiFileAttachment label="Фото" placeholderTip="Загрузить изображение"/>
+        <UiFileAttachment 
+            label="Фото" 
+            placeholderTip="Загрузить изображения" 
+            :multiple="true" 
+            @handleFileChange="onMediaUpload"
+        />
         <UiBtn type="white" @click="onAddCar" width="100%">Добавить</UiBtn>
     </form>
   </div>
@@ -37,12 +43,12 @@
         <div class="selects filters">
             <UiFilterSelect 
                 title="Марка" 
-                :items="brandsDictionary"
+                :items="filtersDictionaries.brands"
                 v-model="filters.brands"
             />
             <UiFilterSelect 
                 title="Модель" 
-                :items="modelsDictionary" 
+                :items="filtersDictionaries.brandModels" 
                 :isBlocks="true"
                 v-model="filters.models"
             />
@@ -56,11 +62,13 @@
             >Сбросить фильтры</button>
         </div>
         <div class="cars">
-            <CarComponent 
+            <OfferComponent 
                 v-for="car in cars"
                 :key="car.id"
-                :car="car" size="small" 
-                @click="event => selectCar(event, car.id)"
+                :offer="car" 
+                size="small" 
+                :isOffer="false"
+                @click="event => onSelectCar(event, car.id)"
             />
         </div>
         
@@ -75,12 +83,12 @@ import UiInput from '@/components/ui/UiInput.vue'
 import UiFileAttachment from '@/components/ui/UiFileAttachment.vue'
 import UiSelect from '@/components/ui/UiSelect.vue'
 import UiFilterSelect from '@/components/ui/UiFilterSelect.vue'
-import CarComponent from '@/components/CarComponent.vue'
+import OfferComponent from '@/components/OfferComponent.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
-    components: { UiInput, UiFileAttachment, UiBtn, UiSelect, UiFilterSelect, CarComponent },
+    components: { UiInput, UiFileAttachment, UiBtn, UiSelect, UiFilterSelect, OfferComponent },
     setup() {
         const store = useStore()
 
@@ -93,6 +101,7 @@ export default {
             power: '',
             price: '',
             year: '',
+            govNumber: '',
         })
 
         const onSelectChange = (key, newValue) => {
@@ -102,24 +111,17 @@ export default {
         const formData = new FormData()
 
         onMounted(() => {
-            store.dispatch('carsharing/fetchCars')/* 
-            store.dispatch('carsharing/fetchBrandsDictionary')
-            store.dispatch('carsharing/fetchModelsDictionary')
-            store.dispatch('carsharing/fetchTypesDictionary')
-            store.dispatch('carsharing/fetchColorsDictionary') */
+            store.dispatch('carsharing/fetchVehicles')
+            store.dispatch('carsharing/fetchOffers')
+            store.dispatch('carsharing/fetchFilterValues')
         })
+        const filtersDictionaries = computed(() => store.getters['carsharing/getFilterValues'])
+        const pricesDictionary = computed(() => store.getters['carsharing/getPricesDictionary'])
 
-        const brandsDictionary = computed(() => store.getters['carsharing/getBrandsDictionary'])
-        const modelsDictionary = computed(() => store.getters['carsharing/getModelsDictionary'])
-        const typesDictionary = computed(() => store.getters['carsharing/getTypesDictionary'])
-        const colorsDictionary = computed(() => store.getters['carsharing/getColorsDictionary'])
-
-        const cars = computed(() => store.getters['carsharing/getCars'])
+        const cars = computed(() => store.getters['carsharing/getVehicles'])
 
         const onMediaUpload = files => {
-            for (let i = 0; i < files.length; i++) {
-                formData.append(files[i].name, files[i])
-            }
+            files.forEach(file => formData.append('images', file))
         }
 
         const onAddCar = () => {
@@ -127,7 +129,7 @@ export default {
                 formData.append(key, carProperties.value[key])
             })
             store.dispatch('admin/addNewCar', carProperties)
-            store.dispatch('carsharing/fetchCars')
+            store.dispatch('carsharing/fetchOffers')
         }
 
         // удаление
@@ -149,27 +151,24 @@ export default {
         const onDeleteCar = () => {
             if(selectedCarId.value) {
                 store.dispatch('admin/deleteCar', selectedCarId.value)
-                store.dispatch('carsharing/fetchCars')
+                store.dispatch('carsharing/fetchOffers')
             }
-            
         }
 
         const onApplyFilters = filters => {
-            store.dispatch('carsharing/fetchCars', filters.value)
+            store.dispatch('carsharing/fetchOffers', filters.value)
         }
 
         const onResetFilters = () => {
             filters.value = {...INITIAL_FILTERS}
-            store.dispatch('carsharing/fetchCars')
+            store.dispatch('carsharing/fetchOffers')
         }
 
         return {
             cars,
             carProperties,
-            brandsDictionary,
-            modelsDictionary,
-            typesDictionary,
-            colorsDictionary,
+            filtersDictionaries,
+            pricesDictionary,
             filters,
 
             //methods

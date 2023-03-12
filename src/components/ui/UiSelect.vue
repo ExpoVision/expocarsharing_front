@@ -6,10 +6,10 @@
     >
       <option selected disabled hidden>{{title ?? 'Выбрать'}}</option>
       <option 
-        v-for="option in options"
-        :key="option.value"
-        :value="option.value"
-      >{{option.label}}</option>
+        v-for="(option, index) in options"
+        :key="index"
+        :value="index"
+      >{{option}}</option>
     </select>
     <img 
       class="select__chevron" 
@@ -29,7 +29,7 @@ export default {
   emits: ['change'],
   props: { 
     title: String,
-    options: Array,
+    options: Object,
   },
   setup(_, { emit }) {
     const isActive = ref(false)

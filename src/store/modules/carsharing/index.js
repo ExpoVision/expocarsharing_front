@@ -3,6 +3,7 @@ import axios from "axios"
 export default {
     namespaced: true,
     state: {
+        vehicles: {},
         offers: {},
         offersByClasses: {},
         filterValues: {},
@@ -14,6 +15,7 @@ export default {
         },
     },
     getters: {
+        getVehicles: state => state.vehicles,
         getOffers: state => state.offers,
         getOffersByClasses: state => state.offersByClasses.data,
         getOfferById: (_, getters) => id => getters.getOffers.find(offer => offer.id == id),
@@ -21,6 +23,9 @@ export default {
         getPricesDictionary: state => state.pricesDictionary
     },
     mutations: {
+        setVehicles(state, payload) {
+            state.vehicles = payload.data
+        },
         setOffers(state, payload) {
             state.offers = payload
         },
@@ -33,6 +38,14 @@ export default {
     },
     actions: {
         //offer.index
+        async fetchVehicles({ commit }, filters) {
+            try {
+                const response = await axios.get('/vehicle', filters ?? null)
+                commit('setVehicles', response.data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
         async fetchOffers({ commit }, filters) {
             try {
                 const response = await axios.get('/offer', filters ?? null)
