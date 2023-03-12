@@ -12,7 +12,7 @@
     <UiInput 
         type="password" 
         label="Введите пароль еще раз" 
-        v-model="formModel.confirmPassworder"
+        v-model="formModel.confirmPassword"
     />
 </template>
 

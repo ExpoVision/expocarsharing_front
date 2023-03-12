@@ -1,26 +1,12 @@
 import axios from 'axios'
-//BackFlag: убрать mocks и вернуть initial значения в state
-import { 
-    users, 
-    orders,
-    archivalSupportRequests, 
-    pendingSupportRequests 
-} from './mocks'
-
-
 export default {
     namespaced: true, 
     state: {
-        // BlackFlag: temp mocks убрать, uncommit initial массивы
-        users,
-        //users: [],
-        archivalSupportRequests,
-        pendingSupportRequests,
-        orders,
-        statistics: {},
-        //orders: [],
-        //archivalSupportRequests: [],
-        //pendingSupportRequests: []
+        users: {},
+        archivalSupportRequests: {},
+        pendingSupportRequests: {},
+        orders: {},
+        statistics: {}
     },
     getters: {
         getUsers: state => state.users,
@@ -53,42 +39,44 @@ export default {
         // BlackFlag: пересмотреть endpoints и параметры
         async fetchUsers({ commit }) {
             try {
-                const { data } = await axios.get('endpoint')
+                const { data } = await axios.get('/user')
                 commit('setUsers', data)
             } catch (e) {
                 console.log(e)
             }
-        },
+        }, 
         async deleteUser({ dispatch }, payload) {
             try {
                 const userId = payload
-                await axios.delete('endpoint', userId)
+                await axios.delete(`/user/${userId}`)
                 dispatch('fetchUsers')
             } catch (e) {
                 console.log(e)
             }
         },
+        // feedback/archival 
         async fetchArchivalSupportRequests({ commit }) {
             try {
-                const { data } = await axios.get('endpoint')
+                const { data } = await axios.get('/feedback/archival')
                 commit('setArchivalSupportRequests', data)
             } catch (e) {
                 console.log(e)
             }
         },
+        // feedback
         async fetchPendingSupportRequests({ commit }) {
             try {
-                const filter = {status: 'pending'}
-                const { data } = await axios.get('endpoint', filter)
+                const { data } = await axios.get('/feedback')
                 commit('setPendingSupportRequests', data)
             } catch (e) {
                 console.log(e)
             }
         },
+        // удаление 
         async completeSupportRequest({ dispatch }, payload) {
             try {
                 const requestId = payload
-                await axios.post('endpoint', requestId)
+                await axios.delete('/feedback', requestId)
                 dispatch('fetchPendingSupportRequests')
                 dispatch('fetchArchivalSupportRequests')
             } catch (e) {
@@ -97,7 +85,7 @@ export default {
         },
         async fetchStatistics({ commit }) {
             try {
-                const { data } = await axios.get('endpoint')
+                const { data } = await axios.get('/service/statistics')
                 commit('setStatistics', data)
             } catch (e) {
                 console.log(e)
@@ -105,7 +93,8 @@ export default {
         },
         async fetchOrdersByStatus({ commit }, payload) {
             try {
-                const { data } = await axios.get('endpoint', payload)
+                const status = payload
+                const { data } = await axios.get(`/order-process/${status}`)
                 commit('setOrders', data)
             } catch (e) {
                 console.log(e)
@@ -114,7 +103,7 @@ export default {
         async confirmBooking({ dispatch }, payload) {
             try {
                 const orderId = payload
-                await axios.post('endpoint', orderId)
+                await axios.post(`/order-process/confirmRent/${orderId}`)
                 dispatch('fetchOrders')
             } catch (e) {
                 console.log(e)
@@ -123,7 +112,7 @@ export default {
         async cancelBooking({ dispatch }, payload) {
             try {
                 const orderId = payload
-                await axios.post('endpoint', orderId)
+                await axios.post(`/order/${orderId}/cancel`)
                 dispatch('fetchOrders')
             } catch (e) {
                 console.log(e)
@@ -132,7 +121,7 @@ export default {
         async confirmPayment({ dispatch }, payload) {
             try {
                 const orderId = payload
-                await axios.post('/order-process/confirmPayment', orderId)
+                await axios.post(`/order-process/confirmPayment/${orderId}`)
                 dispatch('fetchOrders')
             } catch (e) {
                 console.log(e)
@@ -141,7 +130,7 @@ export default {
         async cancelOrder({ dispatch }, payload) {
             try {
                 const orderId = payload
-                await axios.post('endpoint', orderId)
+                await axios.post(`/order-process/cancel/${orderId}`)
                 dispatch('fetchOrders')
             } catch (e) {
                 console.log(e)
@@ -150,7 +139,7 @@ export default {
         async forceComplete({ dispatch }, payload) {
             try {
                 const orderId = payload
-                await axios.post('endpoint', orderId)
+                await axios.post(`/order/${orderId}/forceCancel`)
                 dispatch('fetchOrders')
             } catch (e) {
                 console.log(e)
@@ -158,14 +147,15 @@ export default {
         },
         async addCar(_, payload) {
             try {
-                await axios.post('endpoint', payload)
+                await axios.post('/vehicle', payload)
             } catch (e) {
                 console.log(e)
             }
         },
-        async deleteCar(_, carId) {
+        async deleteCar(_, payload) {
             try {
-                await axios.delete('/vehicle', carId)
+                const carId = payload
+                await axios.delete(`/vehicle/${carId}`)
             } catch (e) {
                 console.log(e)
             }

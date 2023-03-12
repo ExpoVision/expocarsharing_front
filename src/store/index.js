@@ -1,17 +1,23 @@
 import axios from 'axios'
 import { createStore } from 'vuex'
-//BackFlag: убрать mocks и вернуть initial значения в state
 import { faqItems, testimonials } from './mocks'
 
 import carsharing from '@/store/modules/carsharing'
 import admin from '@/store/modules/admin'
 import user from '@/store/modules/user'
 
-axios.defaults.baseURL = 'http://expocarsharing.localhost/api';
+axios.defaults.baseURL = 'http://expocarsharing.localhost/api/v1'
+
+axios.interceptors.request.use((config) => {
+    config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+    return config
+})
+
+
 
 export default createStore({
     state: {
-        // temp mocks
+         // temp mocks
         //faqItems: [],
         faqItems,
         //testimonials: [],

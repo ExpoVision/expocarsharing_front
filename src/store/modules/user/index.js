@@ -1,5 +1,5 @@
 import axios from 'axios'
-const TOKEN_KEY = 'jwt-token'
+const TOKEN_KEY = 'token'
 
 export default {
     namespaced: true,
@@ -30,7 +30,6 @@ export default {
         }
     },
     actions: {
-        // BackFlag заменить endpoints
         async login({ commit }, payload) {
             try {
                 const { data } = await axios.post('/login', payload)

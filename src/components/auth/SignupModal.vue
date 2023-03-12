@@ -80,12 +80,11 @@ export default {
         const formData = new FormData()
 
         const onFileUpdate = (key, file) => {
-            console.log(key, file)
             formData.append(key, file)
         }
         const onSignupSubmit = async () => {
             Object.keys(signupForm.value).forEach(key => {
-                formData.append(key, signupForm.value.key)
+                formData.append(key, signupForm.value[key])
             })
             await store.dispatch('user/signup', formData)
             emit('close')
