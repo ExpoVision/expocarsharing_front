@@ -1,6 +1,4 @@
 import axios from "axios"
-// BackFlag - убрать импорты
-import cars from './mocks'
 import { 
     brandsDictionary, 
     modelsDictionary,
@@ -12,9 +10,7 @@ import {
 export default {
     namespaced: true,
     state: {
-        // BackFlag - убрать данные из mocks
-        // cars: [],
-        cars,
+        offers: {},
         // brandsDictionary: [],
         brandsDictionary,
         //modelsDictionary: [],
@@ -27,8 +23,9 @@ export default {
         colorsDictionary
     },
     getters: {
-        getCars: state => state.cars,
-        getCarById: (_, getters) => id => getters.getCars.find(car => car.id == id),
+        getOffers: state => state.offers,
+        getOffersByClasses: state => state.offersByClasses.data,
+        getOfferById: (_, getters) => id => getters.getOffers.find(offer => offer.id == id),
         getBrandsDictionary: state => state.brandsDictionary,
         getModelsDictionary: state => state.modelsDictionary,
         getPricesDictionary: state => state.pricesDictionary,
@@ -36,8 +33,11 @@ export default {
         getColorsDictionary: state => state.colorsDictionary,
     },
     mutations: {
-        setCars(state, payload) {
-            state.cars = payload
+        setOffers(state, payload) {
+            state.offers = payload
+        },
+        setOffersByClasses(state, payload) {
+            state.offersByClasses = payload
         },
         setBrandsDictionary(state, payload) {
             state.brandsDictionary = payload
@@ -56,18 +56,19 @@ export default {
         },
     },
     actions: {
-        async fetchCars({ commit }, filters) {
+        //offer.index
+        async fetchOffers({ commit }, filters) {
             try {
-                const response = await axios.get('endpoint', filters ?? null)
-                commit('setCars', response.data);
+                const response = await axios.get('/offer', filters ?? null)
+                commit('setOffers', response.data)
             } catch (e) {
                 console.log(e)
             }
         },
-        async fetchFreeCars({ commit }, filters) {
+        async fetchOffersByClasses({ commit }) {
             try {
-                const response = await axios.get('endpoint', filters ?? null)
-                commit('setCars', response.data);
+                const response = await axios.get('/vehicle-class')
+                commit('setOffersByClasses', response.data)
             } catch (e) {
                 console.log(e)
             }

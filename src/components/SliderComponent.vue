@@ -14,13 +14,13 @@
             @mousedown="mouseDown" @mouseup="mouseUp"
         >
             <div class="slider__baffle"></div>
-            <div v-if="type == 'cars'" class="slider__items" ref="slider">
+            <div v-if="type == 'offers'" class="slider__items" ref="slider">
                 <div 
                     class="slider__item"
-                    v-for="(car, index) in elements"
+                    v-for="(offer, index) in elements"
                     :key="index"
                 >
-                    <CarComponent :car="car" />
+                    <OfferComponent :offer="offer" />
                 </div>
             </div>
             <div v-else-if="type == 'testimonials'" class="slider__items" ref="slider">
@@ -47,7 +47,7 @@
 
 <script>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from '@vue/runtime-core'
-import CarComponent from '@/components//CarComponent.vue'
+import OfferComponent from '@/components/OfferComponent.vue'
 import TestimonialComponent from '@/modules/Landing/components/TestimonialComponent.vue'
 
 export default {
@@ -60,7 +60,7 @@ export default {
             default: 2,
         }
     },
-    components: { CarComponent, TestimonialComponent },
+    components: { OfferComponent, TestimonialComponent },
     setup(props) {
         const slider = ref(null)
         const sliderWrapper = ref(null)

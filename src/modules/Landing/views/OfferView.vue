@@ -1,21 +1,21 @@
 <template>
-    <main class="single-car">
-        <section class="single-car__header">
+    <main class="single-offer">
+        <section class="single-offer__header">
             <div class="wrapper">
-                <h1>{{car.title}}</h1>
-                <SingleCarSliderSection :media="car?.media" />
+                <h1>{{offer.title}}</h1>
+                <OfferSliderSection :media="offer?.media" />
             </div>
         </section>
        
-        <section class="single-car__characteristics">
+        <section class="single-offer__characteristics">
             <div class="wrapper">
                 <h2 class="heading">Характерист<br>ики</h2>
                 <div class="characteristics__list">
                     <div class="characteristics__item">
                         <h4>Марка:</h4>
-                        <span>{{car.brand}}</span>
+                        <span>{{offer.brand}}</span>
                     </div>
-                    <!-- BackFlag - заменить показатели на динамические с учетом полей Car -->
+                    <!-- BackFlag - заменить показатели на динамические с учетом полей Offer -->
                     <div class="characteristics__item">
                         <h4>Средняя стоимость аренды в час:</h4>
                         <span>1200 руб.</span>
@@ -61,35 +61,35 @@ import PaymentSection from '@/modules/Landing/Sections/PaymentSection.vue'
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import SingleCarSliderSection from '@landing/components/SingleCarSliderSection.vue'
+import OfferSliderSection from '@landing/components/OfferSliderSection.vue'
 
 
 export default {
-    name: 'SingleCarView',
-    components: { FeedbackComponent, PaymentSection, BookCarSection, SingleCarSliderSection },
+    name: 'OfferView',
+    components: { FeedbackComponent, PaymentSection, BookCarSection, OfferSliderSection },
     setup() {
         const store = useStore()
         const route = useRoute()
 
-        const carId = route.params.id
+        const offerId = route.params.id
 
-        const car = computed(() => store.getters['carhsaring/getCarById', carId])
+        const offer = computed(() => store.getters['offerhsaring/getOfferById', offerId])
 
         onMounted(() => {
-            if(store.getters['carhsaring/getCars'] == []) {
-                store.dispatch('carsharing/fetchCars')
+            if(store.getters['offerhsaring/getOffers'] == []) {
+                store.dispatch('offersharing/fetchOffers')
             }
         })
 
         return {
-            car
+            offer
         }
     }
 }
 </script>
   
 <style lang="scss" scoped>
-    .single-car{
+    .single-offer{
         padding-top: 3em;
 
         h1{

@@ -9,13 +9,13 @@
         </ui-btn>
       </div>
     </section>
-
-    <SliderSection title="Комфорт" :elements="cars" type="cars" />
-    <SliderSection title="Бизнес" :elements="cars" type="cars" />
-    <SliderSection title="Представительский" :elements="cars" type="cars" />
-    <SliderSection title="Спорт" :elements="cars" type="cars" />
-    <SliderSection title="Luxury" :elements="cars" type="cars" />
-
+    <SliderSection 
+      v-for="carsBlock in carsByClasses"
+      :key="carsBlock.id"
+      :title="carsBlock.name" 
+      :elements="carsBlock.offers" 
+      type="offers" 
+    />
     <TestimonialsSection />
     <FaqSection />
     <FeedbackSection />
@@ -30,7 +30,7 @@ import FaqSection from '@/modules/Landing/Sections/FaqSection.vue'
 import FeedbackSection from '@/modules/Landing/Sections/FeedbackSection.vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { computed, /* onMounted, */ } from 'vue'
+import { computed, onMounted } from 'vue'
 
 
 export default {
@@ -40,20 +40,18 @@ export default {
     const store = useStore()
     const router = useRouter()
 
-    const cars = computed(() => store.getters['carhsarin/getCars'])
-
+    const carsByClasses = computed(() => store.getters['carsharing/getOffersByClasses'])
     const toCatalog = () => {
       router.push({name: 'Catalog'})
     }
 
-    //BackFlag - uncomment
-   /*  onMounted(() => {
-      store.dispatch('fetchFaqItems')
-    }) */
+    onMounted(() => {
+      store.dispatch('carsharing/fetchOffersByClasses')
+    })
 
     return {
-      cars,
-      toCatalog,
+      carsByClasses,
+      toCatalog
     }
   }
   

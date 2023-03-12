@@ -1,26 +1,26 @@
 <template>
-  <div class="car" :class="{'car--small': size == 'small'}">
-    <img src="@/assets/img/single_car.png" alt="" class="car__img">
-    <div class="car__info">
-        <h3 class="car__title">{{car.title}}</h3>
-        <div class="car__columns">
+  <div class="offer" :class="{'offer--small': size == 'small'}">
+    <img src="@/assets/img/single_car.png" alt="" class="offer">
+    <div class="offer__info">
+        <h3 class="offer__title">{{offer.vehicle.name}}</h3>
+        <div class="offer__columns">
             <div>
                 <h4>Год выпуска</h4>
-                <span>{{car.year}}</span>
+                <span>{{offer.vehicle.year}}</span>
             </div>
             <div>
                 <h4>Пробег</h4>
-                <span>{{car.mileage}} км</span>
+                <span>{{offer.vehicle.mileage}} км</span>
             </div>
             <div>
                 <h4>Цвет</h4>
-                <span>{{car.color}}</span>
+                <span>{{offer.vehicle.color.name}}</span>
             </div>
         </div>
-        <div class="car__price-block">
-            <div class="car__timer">
+        <div class="offer__price-block">
+            <div class="offer__timer">
                 <img src="@/assets/img/icons/timer.svg" alt="">
-                <span class="price">{{car.price}} &#8381;</span>  / минута
+                <span class="price">{{offer.per_minute}} &#8381;</span>  / минута
             </div>
             <img src="@/assets/img/icons/arrow-right-purple.svg" alt="">
         </div>
@@ -30,22 +30,16 @@
 
 <script>
 export default {
-    name: 'CarComponent',
+    name: 'OfferComponent',
     props: {
-        car: Object,
+        offer: Object,
         size: String,
-        /* src: String,
-        title: String,
-        year: Number,
-        mileage: Number,
-        color: String,
-        price: Number, */
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .car{
+    .offer{
         width: auto;
         max-width: 558px;
         color: $purple;
@@ -59,7 +53,7 @@ export default {
            /*  max-width: 250px; */
             font-size: .9rem;
 
-            .car {
+            .offer {
                 &__title{
                     font-size: 1rem;
                     margin-left: 0;

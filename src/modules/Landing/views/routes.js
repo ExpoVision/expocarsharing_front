@@ -4,7 +4,7 @@ import ProfileView from '@landing/views/ProfileView.vue'
 import ProfileSettingsView from '@landing/views/ProfileSettingsView.vue'
 import CatalogView from '@landing/views/CatalogView.vue'
 import TermsView from '@landing/views/TermsView.vue'
-import SingleCarView from '@landing/views/SingleCarView.vue'
+import OfferView from '@landing/views/OfferView.vue'
 
 import isAuth from '@/router/isAuth'
 
@@ -58,8 +58,8 @@ const landingModuleRoutes = [
             },
             {
                 path: 'car/:id',
-                name: 'SingleCar',
-                component: SingleCarView,
+                name: 'OfferView',
+                component: OfferView,
                 meta: {
                     title: ''
                 }

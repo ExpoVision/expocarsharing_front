@@ -1,12 +1,12 @@
 <template>
-    <div class="single-car__slider slider">
+    <div class="single-offer__slider slider">
         <button class="slider__toLeftBtn" @click="toLeft"><img src="@/assets/img/icons/arrow-left-purple.svg" alt=""></button>
         <button class="slider__toRightBtn" @click="toRight"><img src="@/assets/img/icons/arrow-right-purple.svg" alt=""></button>
         <div class="slider__wrapper">
             <div class="slider__items" ref="slider">
                 <div 
                     class="slider__item"
-                    v-for="(media, index) in car.media"
+                    v-for="(media, index) in offer.vehicle.media"
                     :key="index"
                 >
                     <img src="@/assets/img/single_car.png" alt="">

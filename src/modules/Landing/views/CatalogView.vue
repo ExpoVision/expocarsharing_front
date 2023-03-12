@@ -6,14 +6,14 @@
             @resetFilters="onResetFilters"
           />
           <div class="cars">
-              <CarComponent 
-                  v-for="(car, index) in cars"
+              <OfferComponent 
+                  v-for="(offer, index) in offers"
                   :key="index"
-                  :car="car"
+                  :offer="offer"
               />
           </div>
           <UiPagination 
-            :items="cars"
+            :items="offers"
             :perPage="6"
             @onPageChange="onPageChange"
           />
@@ -23,50 +23,38 @@
 </template>
 
 <script>
-import CarComponent from '@/components/CarComponent.vue'
+import OfferComponent from '@/components/OfferComponent.vue'
 import FeedbackComponent from '@/modules/Landing/Sections/FeedbackSection.vue'
 import FiltersComponent from '@landing/components/FiltersComponent.vue'
 import UiPagination from '@/components/ui/UiPagination.vue'
 import { useStore } from 'vuex'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 export default {
   name: 'CatalogView',
-  components: { CarComponent, FeedbackComponent, FiltersComponent, UiPagination },
+  components: { OfferComponent, FeedbackComponent, FiltersComponent, UiPagination },
   setup() {
-      const store = useStore()
+    const store = useStore()
 
-      const currentPage = ref(1)
+    const offers = computed(() => store.getters['carsharing/getOffers'])
 
-      const cars = [
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-          {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-      ]
+    const currentPage = ref(1)
 
     const onPageChange = (page) => {
       this.currentPage = page;
     }
 
     const onApplyFilters = filters => {
-        store.dispatch('carsharing/fetchCars', filters.value)
+        store.dispatch('carsharing/fetchOffers', filters.value)
     }
 
     const onResetFilters = () => {
-        store.dispatch('carsharing/fetchCars')
+        store.dispatch('carsharing/fetchOffers')
     }
 
     return {
       currentPage,
-      cars,
+      offers,
       onPageChange,
       onApplyFilters,
       onResetFilters,
