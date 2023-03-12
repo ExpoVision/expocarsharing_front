@@ -1,23 +1,27 @@
 <template>
   <div class="offer" :class="{'offer--small': size == 'small'}">
-    <img src="@/assets/img/single_car.png" alt="" class="offer">
+    <img src="@/assets/img/single_car.png" alt="" class="offer__img">
     <div class="offer__info">
-        <h3 class="offer__title">{{offer.vehicle.name}}</h3>
+        <h3 v-if="isOffer" class="offer__title">{{offer.vehicle.name}}</h3>
+        <h3 v-else class="offer__title">{{offer.brand.name}} {{offer.model.name}}</h3>
         <div class="offer__columns">
             <div>
                 <h4>Год выпуска</h4>
-                <span>{{offer.vehicle.year}}</span>
+                <span v-if="isOffer">{{offer.vehicle.year}}</span>
+                <span v-else>{{offer.year}}</span>
             </div>
             <div>
                 <h4>Пробег</h4>
-                <span>{{offer.vehicle.mileage}} км</span>
+                <span v-if="isOffer">{{offer.vehicle.mileage}}</span>
+                <span v-else>{{offer.mileage}}</span>
             </div>
             <div>
                 <h4>Цвет</h4>
-                <span>{{offer.vehicle.color.name}}</span>
+                <span v-if="isOffer">{{offer.vehicle.color.name}}</span>
+                <span v-else>{{offer.color.name}}</span>
             </div>
         </div>
-        <div class="offer__price-block">
+        <div v-if="isOffer" class="offer__price-block">
             <div class="offer__timer">
                 <img src="@/assets/img/icons/timer.svg" alt="">
                 <span class="price">{{offer.per_minute}} &#8381;</span>  / минута
@@ -34,6 +38,11 @@ export default {
     props: {
         offer: Object,
         size: String,
+        isOffer: {
+            type: Boolean,
+            required: false,
+            default: true,
+        }
     }
 }
 </script>
@@ -50,40 +59,39 @@ export default {
         cursor: pointer;
 
         &--small{
-           /*  max-width: 250px; */
+            max-width: 250px;
             font-size: .9rem;
+        
+            .offer__title{
+                font-size: 1rem;
+                margin-left: 0;
+            }
 
-            .offer {
-                &__title{
-                    font-size: 1rem;
-                    margin-left: 0;
+            .offer__img{
+                height: 190px;
+                width: 100%;
+            }
+
+            .offer__info{
+                padding: 1.3em;
+            }
+
+            .offer__columns{
+                flex-direction: column;
+                border: none;
+
+                h4{
+                    display: inline-block;
+                    margin-bottom: 0;
+                    margin-right: .9em;
                 }
 
-                &__img{
-                    height: 190px;
-                }
-
-                &__info{
-                    padding: 1.3em;
-                }
-
-                &__columns{
-                    flex-direction: column;
-                    border: none;
-
-                    h4{
-                        display: inline-block;
-                        margin-bottom: 0;
-                        margin-right: .9em;
-                    }
-
-                    div{
-                        width: 100%;
-                        padding: .688em 0;
-                        
-                        &:nth-child(2){
-                            border: none;
-                        }
+                div{
+                    width: 100%;
+                    padding: .688em 0;
+                    
+                    &:nth-child(2){
+                        border: none;
                     }
                 }
             }
