@@ -2,28 +2,18 @@
     <h1>Статистика сервиса</h1>
     <ul class="statistics-list">
         <li class="statistics-list__item">
-            <span class="statistics-list-item-label">Пользователей онлайн:  </span>
-            <span class="statistics-list__item-number">{{statistics.usersOnline}}</span>
-        </li>
-
-        <li class="statistics-list__item">
             <span class="statistics-list-item-label">Всего пользователей: </span>
-            <span class="statistics-list__item-number">{{statistics.usersTotal}}</span>
-        </li>
-
-        <li class="statistics-list__item">
-            <span class="statistics-list-item-label">Всего завершенных cеансов каршеринга:  </span>
-            <span class="statistics-list__item-number">{{statistics.totalCompletedCarsharingSessions}}</span>
+            <span class="statistics-list__item-number">{{statistics.users}}</span>
         </li>
 
         <li class="statistics-list__item">
             <span class="statistics-list-item-label">Автопарк (активные): </span>
-            <span class="statistics-list__item-number">{{statistics.carparkActive}}</span>
+            <span class="statistics-list__item-number">{{statistics.rented}}</span>
         </li>
 
         <li class="statistics-list__item">
             <span class="statistics-list-item-label">Автопарк (всего):  </span>
-            <span class="statistics-list__item-number">{{statistics.carparkTotal}}</span>
+            <span class="statistics-list__item-number">{{statistics.offers}}</span>
         </li>
     </ul>
 </template>
@@ -36,13 +26,6 @@ export default {
     setup() {
         const store = useStore()
 
-        /* {
-            usersOnline: 50,
-            usersTotal: 100,
-            totalCompletedCarsharingSessions: 400,
-            carparkActive: 55,
-            carparkTotal: 150
-        } */
         const statistics = computed(() => {
             return store.getters['admin/getStatistics']
         })
