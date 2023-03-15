@@ -34,12 +34,14 @@
 import UiBtn from '@/components/ui/UiBtn.vue'
 import UiInput from '@/components/ui/UiInput.vue'
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 export default {
     components: { UiBtn, UiInput },
     setup() {
         const store = useStore()
+        const route = useRoute()
 
         const bookCarData = ref({
             address: '',
@@ -47,8 +49,11 @@ export default {
             number: ''
         })
 
-        const onSubmit = () => {
-            store.dispatch('carsharing/bookCar', bookCarData)
+        const onSubmit = async () => {
+            store.dispatch('carsharing/bookCar', { bookCarData, carId: route.params.id })
+            bookCarData.value.address = ''
+            bookCarData.value.name = ''
+            bookCarData.value.number = ''
         }
 
         return {
