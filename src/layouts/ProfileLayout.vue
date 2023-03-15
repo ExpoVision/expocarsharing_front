@@ -9,7 +9,11 @@
                     <ul>
                         <li><router-link to="/profile">Мой профиль</router-link></li>
                         <li><router-link to="/profilesettings">Настройки</router-link></li>
-                        <li class="signout-li"><a href="#"><img src="@/assets/img/icons/signout.svg" alt="">Выход</a></li>
+                        <li class="signout-li">
+                            <a @click.prevent="onLogout">
+                                <img src="@/assets/img/icons/signout.svg" alt="">Выход
+                            </a>
+                        </li>
                     </ul>
                 </aside>
                 <main class="profile__main">
@@ -25,12 +29,27 @@
   import LandingHeader from '@/layouts/parts/LandingHeader.vue'
   import LandingFooter from '@/layouts/parts/LandingFooter.vue'
   import BreadcrumbsComponent from '@/components/BreadcrumbsComponent.vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
   
   export default {
     components: { 
         LandingHeader, 
         LandingFooter, 
         BreadcrumbsComponent,
+    },
+    setup() {
+        const store = useStore()
+        const router = useRouter()
+
+        const onLogout = async () => {
+            await store.commit('user/logout')
+            router.push({name: 'Home'})
+        }
+
+        return {
+            onLogout
+        }
     }
   }
   </script>

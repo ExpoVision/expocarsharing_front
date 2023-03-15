@@ -8,7 +8,7 @@
         <h2>
           Администратор
         </h2>
-        <router-link to="/">Выйти</router-link>
+        <a @click.prevent="onLogout" class="admin-aside__logout">Выйти</a>
       </div>
     </div>
 
@@ -35,6 +35,8 @@
 
 <script>
 import UiBtn from '@/components/ui/UiBtn.vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
     setup() {
@@ -46,9 +48,18 @@ export default {
             { label: "Пользователи", to: "/users" },
             { label: "Настройки", to: "/" },
             { label: "Запросы поддержки", to: "/supportrequests" },
-        ];
+        ]
+
+        const store = useStore()
+        const router = useRouter()
+
+        const onLogout = async () => {
+            await store.commit('user/logout')
+            router.push({name: 'Home'})
+        }
         return {
-          navItems
+          navItems,
+          onLogout
         };
     },
     components: { UiBtn }
@@ -94,6 +105,21 @@ export default {
             object-fit: cover;
           }
         }
+        &__logout{
+          display: block;
+          border: none;
+          padding: 0;
+          background: none;
+          color: $purple;
+          cursor: pointer;
+          transition: .3s;
+
+          &:hover,
+          &:active{
+            color: $purple-dark;
+          }
+        }
+
         .ui-btn{
           margin-bottom: 1em;
           text-transform: none;
