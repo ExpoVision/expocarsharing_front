@@ -7,7 +7,7 @@
     </div>
     <ul class="support-requests-list">
         <li 
-            v-for="request in supportRequestsByStatus"
+            v-for="request in supportRequestsList"
             :key="request.id"
         >
             <div class="support-requests-list__user">
@@ -59,6 +59,8 @@ export default {
         return {
             showArchive,
             supportRequestsList,
+            archivalSupportRequests,
+            pendingSupportRequests,
             switchToArchive,
             complete
         }

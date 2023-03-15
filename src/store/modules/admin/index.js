@@ -23,10 +23,10 @@ export default {
             state.users = payload
         },
         setArchivalSupportRequests(state, payload) {
-            state.archivalSupportRequests = payload
+            state.archivalSupportRequests = payload.data
         },
         setPendingSupportRequests(state, payload) {
-            state.pendingSupportRequests = payload
+            state.pendingSupportRequests = payload.data
         },
         setStatistics(state, payload) {
             state.statistics = payload
