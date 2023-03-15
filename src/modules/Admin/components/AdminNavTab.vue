@@ -1,9 +1,9 @@
 <template>
     <div class="status-btns">
-        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'booked')">Забронированные</UiBtn>
-        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'confirmPayment')">Подтверждение оплаты</UiBtn>
-        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'active')">Активные</UiBtn>
-        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'completed')">История</UiBtn>
+        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'reserved')">Забронированные</UiBtn>
+        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'confirming')">Подтверждение оплаты</UiBtn>
+        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'rented')">Активные</UiBtn>
+        <UiBtn width="165px" padding="1em" type="white" @click="$emit('setStatus', 'archived')">История</UiBtn>
     </div>
 </template>
 

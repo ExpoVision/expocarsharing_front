@@ -2,10 +2,10 @@ import axios from 'axios'
 export default {
     namespaced: true, 
     state: {
-        users: {},
-        archivalSupportRequests: {},
-        pendingSupportRequests: {},
-        orders: {},
+        users: [],
+        archivalSupportRequests: [],
+        pendingSupportRequests: [],
+        orders: [],
         statistics: {}
     },
     getters: {
@@ -14,9 +14,7 @@ export default {
         getPendingSupportRequests:  state => state.pendingSupportRequests,
         getStatistics: state => state.statistics,
         getOrders: state => state.orders,
-        getOrderById: (_, getters) => (id) => {
-            return getters.getOrders.find(order => order.id == id)
-        },
+        getOrderById: (_, getters) => id => getters.getOrders.find(order => order.id == id),
     },
     mutations: {
         setUsers(state, payload) {
@@ -32,7 +30,9 @@ export default {
             state.statistics = payload
         },
         setOrders(state, payload) {
-            state.orders = payload
+            console.log(payload)
+            state.orders = payload.data
+            console.log(state.orders)
         }
     },
     actions: {
@@ -102,9 +102,9 @@ export default {
         },
         async confirmBooking({ dispatch }, payload) {
             try {
-                const orderId = payload
+                const orderId = payload.orderId
                 await axios.post(`/order-process/confirmRent/${orderId}`)
-                dispatch('fetchOrders')
+                dispatch('fetchOrdersByStatus', payload.status)
             } catch (e) {
                 console.log(e)
             }

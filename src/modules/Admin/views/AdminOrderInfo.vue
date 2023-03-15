@@ -5,19 +5,19 @@
         <div class="carsharing__info">
             <div class="carsharing-info-row">
                 <span class="info-title">Статус:</span> 
-                <span>{{statuses[order.status]}}</span>
+                <span>{{order?.status}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Клиент:</span> 
-                <span>{{order.user.fullName}}</span>
+                <span>{{order?.user.name}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Адрес:</span> 
-                <span>{{order.address}}</span>
+                <span>{{order?.address}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Тел:</span> 
-                <span>{{order.user.phoneNumber}}</span>
+                <span>{{order?.user.phoneNumber}}</span>
             </div>
         </div>
     </div>
@@ -26,23 +26,23 @@
             <h3>Данные авто</h3>
             <div class="carsharing-info-row">
                 <span class="info-title">Марка:</span> 
-                <span>{{order.car.brand}}</span>
+                <span>{{order?.vehicle.brand.name}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Двигатель:</span> 
-                <span>{{order.car.engine}}</span>
+                <span>{{order?.vehicle.engine}}</span>
             </div>
             <div class="carsharing-info-row">
                 <span class="info-title">Г.Номер:</span> 
-                <span>{{order.car.govNumber}}</span>
+                <span>{{order?.vehicle.govNumber}}</span>
             </div>
-            <div class="carsharing-info-row">
+            <!-- <div class="carsharing-info-row">
                 <span class="info-title">Адрес:</span> 
-                <span>{{order.car.address}}</span>
-            </div>
+                <span>{{order.vehicle.address}}</span>
+            </div> -->
             <div class="carsharing-info-row">
                 <span class="info-title">ID:</span> 
-                <span>{{order.car.id}}</span>
+                <span>{{order?.vehicle.id}}</span>
             </div>
         </div>
         <div class="car__map">
@@ -51,7 +51,7 @@
     </div>
 
     <div class="carsharing-bottom">
-        <div v-if="order.status == 'booked'" class="carsharing-bottom__btns">
+        <div v-if="order?.status == 'RESERVED'" class="carsharing-bottom__btns">
             <UiBtn
                 padding="1em"
                 type="white"
@@ -63,7 +63,7 @@
                 @click="cancelBooking"
             >Отменить бронь</UiBtn>
         </div>
-        <div v-if="order.status == 'confirmPayment'" class="carsharing-bottom__btns">
+        <div v-if="order?.status == 'CONFIRMING_RENT'" class="carsharing-bottom__btns">
             <UiBtn
                 padding="1em"
                 type="white"
@@ -75,21 +75,21 @@
                 @click="cancelOrder"
             >Отменить заказ</UiBtn>
         </div>
-        <div v-if="order.status == 'active'" class="carsharing-bottom__btns">
+        <div v-if="order?.status == 'RENTED'" class="carsharing-bottom__btns">
             <UiBtn
                 padding="1em"
                 type="white"
                 @click="forceComplete"
             >Принудительное завершение</UiBtn>
         </div>
-        <div v-if="order.status == 'active' || order.status == 'completed'">
-            <p class="carsharing-info-row">
+        <div v-if="order?.status == 'RESERVED' || order?.status == 'FINISH'">
+            <!-- <p class="carsharing-info-row">
             <span class="info-title">Время сессии:</span> 
-            <span>{{order.time}}</span>
-            </p>
+            <span>{{order?.totalHours}}</span>
+            </p> -->
             <p class="carsharing-info-row">
                 <span class="info-title">Тариф:</span> 
-                <span>{{order.car.price}} руб/мин</span>
+                <span>{{order?.offer.per_minute}} руб/мин</span>
             </p>
         </div>
     </div>
@@ -97,7 +97,7 @@
 
 <script>
 import UiBtn from '@/components/ui/UiBtn.vue'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -108,29 +108,29 @@ export default {
         const route = useRoute()
 
         const statuses = {
-            'booked': 'Забронирован',
-            'confirmPayment': 'Оплата доставки',
-            'active': 'Активный',
-            'completed': 'Завершен',
+            'reserved': 'Забронирован',
+            'confirming': 'Оплата доставки',
+            'rented': 'Активный',
+            'archived': 'Завершен',
         }
 
         const orderId = route.params.id
 
-        const order = computed(() => {
-            return store.getters['admin/getOrderById'](orderId)
+        const order = computed(() => store.getters['admin/getOrderById'](orderId))
+
+        onMounted(() => {
+            store.dispatch('admin/fetchOrdersByStatus', route.query.status)
         })
 
-        console.log(store)
-
         const title = computed(() =>  {
-            switch(order.value.status){
-                case('booked'):
+            switch(order.value?.status){
+                case('reserved'):
                     return 'Забронированные авто'
-                case('confirmPayment'):
+                case('confirming'):
                     return 'Подтверждение оплаты'
-                case('active'):
+                case('rented'):
                     return 'Активные'
-                case('completed'):
+                case('archived'):
                     return 'Завершен'
                 default: 
                     return 'Информация'
@@ -138,23 +138,23 @@ export default {
         })
 
         const confirmBooking = () => {
-            store.dispatch('admin/confirmBooking', orderId)
+            store.dispatch('admin/confirmBooking', {orderId, status: route.query.status})
         }
 
         const cancelBooking = () => {
-            store.dispatch('admin/cancelBooking', orderId)
+            store.dispatch('admin/cancelBooking', {orderId, status: route.query.status})
         }
 
         const confirmPayment = () => {
-            store.dispatch('admin/confirmPayment', orderId)
+            store.dispatch('admin/confirmPayment', {orderId, status: route.query.status})
         }
 
         const cancelOrder = () => {
-            store.dispatch('admin/cancelOrder', orderId)
+            store.dispatch('admin/cancelOrder', {orderId, status: route.query.status})
         }
 
         const forceComplete = () => {
-            store.dispatch('admin/forceComplete', orderId)
+            store.dispatch('admin/forceComplete', {orderId, status: route.query.status})
         }
 
         return {

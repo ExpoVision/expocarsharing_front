@@ -5,14 +5,11 @@
         <div 
             class="order-block"
             v-for="order in orders"
-            :key="order.id"
+            :key="order"
         >
-            <div class="order-block__time">
-                {{order.car.time}}
-            </div>
-            <CarComponent :car="order.car" size="small" />
+            <OfferComponent :offer="order.offer" size="small" />
             <UiBtn 
-                width="93%"
+                width="100%"
                 padding="1em"
                 type="white"
                 @click="toCarsharingInfo(order.id)"
@@ -22,7 +19,7 @@
 </template>
 
 <script>
-import CarComponent from '@/components/CarComponent.vue'
+import OfferComponent from '@/components/OfferComponent.vue'
 import AdminNavTab from '@/modules/Admin/components/AdminNavTab.vue'
 import UiBtn from '@/components/ui/UiBtn.vue'
 import { useStore } from 'vuex'
@@ -30,12 +27,12 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
-    components: { AdminNavTab, CarComponent, UiBtn },
+    components: { AdminNavTab, OfferComponent, UiBtn },
     setup() {
         const store = useStore()
         const router = useRouter()
 
-        const status = ref('booked')
+        const status = ref('reserved')
 
         const fetchOrders = ordersStatus => {
             store.dispatch('admin/fetchOrdersByStatus', ordersStatus)
@@ -56,7 +53,7 @@ export default {
         })
 
         const toCarsharingInfo = id => {
-            router.push({name: 'AdminOrderInfo', params: {id}})
+            router.push({name: 'AdminOrderInfo', params: {id}, query: {status: status.value}})
         }
 
         return {
