@@ -2,8 +2,8 @@
     <main class="single-offer">
         <section class="single-offer__header">
             <div class="wrapper">
-                <h1>{{offer.title}}</h1>
-                <OfferSliderSection :media="offer?.media" />
+                <h1>{{offer?.vehicle.brand.title}} {{offer?.vehicle.model.title}}</h1>
+                <OfferSliderSection v-if="offer?.vehicle.media" :media="offer?.vehicle.media" />
             </div>
         </section>
        
@@ -13,12 +13,11 @@
                 <div class="characteristics__list">
                     <div class="characteristics__item">
                         <h4>Марка:</h4>
-                        <span>{{offer.brand}}</span>
+                        <span>{{offer?.vehicle.brand}}</span>
                     </div>
-                    <!-- BackFlag - заменить показатели на динамические с учетом полей Offer -->
                     <div class="characteristics__item">
                         <h4>Средняя стоимость аренды в час:</h4>
-                        <span>1200 руб.</span>
+                        <span>{{offer?.per_minute}}</span>
                     </div>
                     <div class="characteristics__item">
                         <h4>Объём лошадиных сил:</h4>
@@ -73,11 +72,11 @@ export default {
 
         const offerId = route.params.id
 
-        const offer = computed(() => store.getters['offerhsaring/getOfferById', offerId])
+        const offer = computed(() => store.getters['carsharing/getOfferByCarId'](offerId))
 
         onMounted(() => {
-            if(store.getters['offerhsaring/getOffers'] == []) {
-                store.dispatch('offersharing/fetchOffers')
+            if(store.getters['carsharing/getOffers'] == []) {
+                store.dispatch('carsharing/fetchOffers')
             }
         })
 

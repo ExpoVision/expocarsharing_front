@@ -3,10 +3,10 @@ import axios from "axios"
 export default {
     namespaced: true,
     state: {
-        vehicles: {},
-        offers: {},
-        offersByClasses: {},
-        filterValues: {},
+        vehicles: [],
+        offers: [],
+        offersByClasses: [],
+        filterValues: [],
         pricesDictionary: {
             1: 'до 10 000 ₽',
             2: 'от  10 000 ₽ до 20 000 ₽',
@@ -18,7 +18,7 @@ export default {
         getVehicles: state => state.vehicles,
         getOffers: state => state.offers,
         getOffersByClasses: state => state.offersByClasses.data,
-        getOfferById: (_, getters) => id => getters.getOffers.find(offer => offer.id == id),
+        getOfferByCarId: (_, getters) => id => getters.getOffers.find(({vehicle}) => vehicle.id == id),
         getFilterValues: state => state.filterValues,
         getPricesDictionary: state => state.pricesDictionary
     },
@@ -27,13 +27,13 @@ export default {
             state.vehicles = payload.data
         },
         setOffers(state, payload) {
-            state.offers = payload
+            state.offers = payload.data
         },
         setOffersByClasses(state, payload) {
-            state.offersByClasses = payload
+            state.offersByClasses = payload.data
         },
         setFilterValues(state, payload) {
-            state.filterValues = payload
+            state.filterValues = payload.data
         },
     },
     actions: {
