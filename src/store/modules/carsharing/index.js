@@ -33,7 +33,7 @@ export default {
             state.offersByClasses = payload.data
         },
         setFilterValues(state, payload) {
-            state.filterValues = payload.data
+            state.filterValues = payload
         },
     },
     actions: {

@@ -3,7 +3,7 @@
         <div class="filters__selects">
             <UiFilterSelect 
                 title="Марка" 
-                :items="filtersDictionaries.brands"
+                :items="filtersDictionaries?.brands"
                 v-model="filters.brands"
             />
             <UiFilterSelect 
@@ -19,7 +19,7 @@
             /> -->
             <UiFilterSelect 
                 title="Цвет" 
-                :items="filtersDictionaries.colors" 
+                :items="filtersDictionaries?.colors" 
                 v-model="filters.colors"
             />
             <button 
@@ -34,7 +34,7 @@
         </div>
         <div class="filters__bottom">
             <div class="found">
-                Найдено 16 авто
+                Найдено {{offers.length}} авто
             </div>
             <div class="sort">
                 <span>Cортировка:</span>
@@ -57,6 +57,7 @@ export default {
         const store = useStore()
         const filtersDictionaries = computed(() => store.getters['carsharing/getFilterValues'])
         const pricesDictionary = computed(() => store.getters['carsharing/getPricesDictionary'])
+        const offers = computed(() => store.getters['carsharing/getOffers'])
 
         // запросить словари для фильтров
         onMounted(async () => {
@@ -111,6 +112,7 @@ export default {
             filters,
             SORT_TYPE,
             sort,
+            offers,
 
             //methods
             applyFilters,

@@ -28,7 +28,7 @@ import FeedbackComponent from '@/modules/Landing/Sections/FeedbackSection.vue'
 import FiltersComponent from '@landing/components/FiltersComponent.vue'
 import UiPagination from '@/components/ui/UiPagination.vue'
 import { useStore } from 'vuex'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 export default {
   name: 'CatalogView',
@@ -44,8 +44,12 @@ export default {
       this.currentPage = page;
     }
 
+    onMounted(() => {
+      store.dispatch('carsharing/fetchOffers')
+    })
+
     const onApplyFilters = filters => {
-        store.dispatch('carsharing/fetchOffers', filters.value)
+      store.dispatch('carsharing/fetchOffers', filters.value)
     }
 
     const onResetFilters = () => {
