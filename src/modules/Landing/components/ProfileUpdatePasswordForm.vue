@@ -24,6 +24,7 @@ import UiInput from '@/components/ui/UiInput.vue'
 import ProfileSettingsForm from '@/modules/Landing/components/ProfileSettingsForm.vue'
 import { useStore } from 'vuex'
 import { ref } from 'vue'
+import { computed } from '@vue/reactivity'
 
 export default {
     name: 'ProfileView',
@@ -37,11 +38,15 @@ export default {
             confirmPassword: ''
         })
 
+        const user = computed(() => store.getters['user/getUser'])
         const onPasswordChangeSubmit = () => {
             if(passwordInfo.value.password 
                 && passwordInfo.value.confirmPassword 
                 && passwordInfo.value.password === passwordInfo.value.confirmPassword 
-            )  store.dispatch('user/updatePassword', passwordInfo.value)
+            )  store.dispatch('user/updatePassword', {
+                                passwordInfo: passwordInfo.value,
+                                userId: user.value.id
+                            })
         }
 
         return {

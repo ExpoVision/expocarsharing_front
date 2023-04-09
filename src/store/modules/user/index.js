@@ -6,7 +6,8 @@ export default {
     state: {
         token: localStorage.getItem(TOKEN_KEY),
         userProfileInfo: {},
-        user: null
+        user: null,
+        userCard: null
     },
     getters: {
         token: (state) => {
@@ -18,7 +19,8 @@ export default {
         isAuth: (_, getters) => {
             return !!getters.token
         },
-        getUserProfileInfo: state => state.userProfileInfo
+        getUserProfileInfo: state => state.userProfileInfo,
+        getUserCard: state => state.userCard,
     },
     mutations: {
         setToken(state, token) {
@@ -27,11 +29,15 @@ export default {
         },
         setUser(state, user) {
             state.user = user
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', JSON.stringify({id: user.id, name: user.name}));
+        },
+        setUserCard(state, userCard) {
+            state.userCard = userCard.data
         },
         logout(state) {
             state.token = null;
             localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem('user');
         },
         setUserProfileInfo(state, payload) {
             state.userProfileInfo = payload.data
@@ -72,7 +78,7 @@ export default {
                 const headers = {
                     'Content-Type': 'multipart/form-data',
                 }
-                const { data } = await axios.post('endpoint', payload, headers)
+                const { data } = await axios.post('/user-profile', payload, headers)
                 dispatch('setUserProfileInfo', data)
             } catch (e) {
                 console.log(e)
@@ -80,21 +86,25 @@ export default {
         },
         async updatePassword(_, payload) {
             try {
-                const headers = {
-                    'Content-Type': 'multipart/form-data',
-                }
-                await axios.post('endpoint', payload, headers)
-                // todo
+                await axios.post(`/user-password/${payload.userId}`, {
+                                    password: payload.passwordInfo.password,
+                                    password_confirmation: payload.passwordInfo.confirmPassword
+                                })
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async fetchUserCard({ commit }, payload) {
+            try {
+                const { data } = await axios.get(`/user-pay/${payload.userId}`)
+                commit('setUserCard', data)
             } catch (e) {
                 console.log(e)
             }
         },
         async updateCard(_, payload) {
             try {
-                const headers = {
-                    'Content-Type': 'multipart/form-data',
-                }
-                await axios.post('endpoint', payload, headers)
+                await axios.post('/user-pay', payload)
             } catch (e) {
                 console.log(e)
             }

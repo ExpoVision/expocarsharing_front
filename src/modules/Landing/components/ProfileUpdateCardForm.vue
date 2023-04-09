@@ -40,8 +40,18 @@
             </div>
         </div>
         <div class="profile__settings-row">
-            <UiInput type="text" label="Имя и Фамилия владельца карты" placeholder="Имя" />
-            <UiInput type="text" label="" placeholder="Фамилия" />
+            <UiInput 
+                v-model="cardInfo.ownerFirstname"
+                type="text"
+                label="Имя и Фамилия владельца карты"
+                placeholder="Имя"
+            />
+            <UiInput 
+                v-model="cardInfo.ownerSurname"
+                type="text"
+                label=""
+                placeholder="Фамилия"
+            />
         </div>
     </ProfileSettingsForm>
   </template>
@@ -50,16 +60,17 @@
 import UiInput from '@/components/ui/UiInput.vue'
 import ProfileSettingsForm from '@/modules/Landing/components/ProfileSettingsForm.vue'
 import { useStore } from 'vuex'
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 export default {
     name: 'ProfileView',
     components: { UiInput, ProfileSettingsForm },
     setup() {
         const store = useStore()
+        const user = computed(() => store.getters['user/getUser'])
 
-        // card
-        // BackFlag - проверить соответствие полям на бэке
+        const userCard = computed(() => store.getters['user/getUserCard'])
+
         const cardInfo = ref({
             cardNumber: '',
             expireDateMonth: '',
@@ -69,16 +80,30 @@ export default {
             ownerSurname: ''
         })
 
-        const onCardChangeSubmit = () => {
-            // BackFlag - проверить соответствие полям на бэке
-            // если expireDate нужен в разделенном виде - можно в payload передать cardInfo.value
-            store.dispatch('user/updateCard', {
-                cardNumber: cardInfo.value.cardNumber,
-                expireDate: `${cardInfo.value.expireDateMonth}/${cardInfo.value.expireDateMonth}`,
-                cardCode: cardInfo.value.cardCode,
-                ownerFirstname: cardInfo.value.ownerFirstname,
-                ownerSurname: cardInfo.value.ownerSurname
+        const KEYS_LINK = {
+            'cardNumber': 'card_number',
+            'expireDateMonth': 'expdate_month',
+            'expireDateYear': 'expdate_year',
+            'cardCode': 'cvv',
+            'ownerFirstname': 'holder_name',
+            'ownerSurname': 'holder_surname'
+        }
+        
+        onMounted( async () =>{
+            await store.dispatch('user/fetchUserCard', {userId: user.value.id})
+
+            Object.keys(KEYS_LINK).forEach(key => {
+                cardInfo.value[key] = userCard.value[KEYS_LINK[key]]
             })
+        })
+        
+        const onCardChangeSubmit = () => {
+            const payload = ref({})
+            Object.keys(KEYS_LINK).forEach(key => {
+                payload.value[KEYS_LINK[key]] = cardInfo.value[[key]]
+            })
+
+            store.dispatch('user/updateCard', {...payload.value, user_id: user.value.id})
         }
 
         return {
