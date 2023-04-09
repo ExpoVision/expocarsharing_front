@@ -5,11 +5,15 @@ export default {
     namespaced: true,
     state: {
         token: localStorage.getItem(TOKEN_KEY),
-        userProfileInfo: {}
+        userProfileInfo: {},
+        user: null
     },
     getters: {
         token: (state) => {
             return state.token
+        },
+        getUser: (state) => {
+            return state.user ?? JSON.parse(localStorage.getItem('user'))
         },
         isAuth: (_, getters) => {
             return !!getters.token
@@ -21,19 +25,24 @@ export default {
             state.token = token;
             localStorage.setItem(TOKEN_KEY, token);
         },
+        setUser(state, user) {
+            state.user = user
+            localStorage.setItem('user', JSON.stringify(user));
+        },
         logout(state) {
             state.token = null;
             localStorage.removeItem(TOKEN_KEY);
         },
         setUserProfileInfo(state, payload) {
-            state.userProfileInfo = payload
+            state.userProfileInfo = payload.data
         }
     },
     actions: {
         async login({ commit }, payload) {
             try {
                 const { data } = await axios.post('/login', payload)
-                commit('setToken', data.token);
+                commit('setToken', data.token)
+                commit('setUser', data.user)
             } catch (e) {
                 console.log(e)
             }
@@ -45,6 +54,7 @@ export default {
                 }
                 const { data } = await axios.post('/register', payload, headers)
                 commit('setToken', data.token)
+                commit('setUser', data.user)
             } catch (e) {
                 console.log(e)
             }

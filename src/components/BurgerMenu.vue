@@ -6,10 +6,14 @@
     <div class="burger-menu-nav"  @click="$emit('toggleMobileMenu')">
         <MainNav type="mobile-visible mobile-visible--left"></MainNav>
     </div>
-    <a class="signin" @click="openSigninModal">
+    <a v-if="user" class="signin" @click="toProfile">
+      <img src="@/assets/img/icons/avatar-white.svg" alt="">
+        {{user.name}} 
+      </a>
+      <a v-else class="signin" @click="openSigninModal">
         <img src="@/assets/img/icons/avatar-white.svg" alt="">
-        Войти
-    </a>
+        Войти 
+      </a>
   </div>
   <LoginModal :show="showLoginModal" @close="closeLoginModal" @openSignupModal="openSignupModal" />
   <SignupModal :show="showSignupModal" @close="closeSignupModal" />
@@ -30,9 +34,15 @@ export default {
         showSignupModal: false,
       }
     },
+    computed: {
+      user() {
+        return this.$store.getters['user/getUser']
+      }
+    },
     methods: {
       toProfile() {
         this.$router.push({name: 'Profile'})
+        this.closeLoginModal()
       },
       openSigninModal(){
         this.showLoginModal = true
@@ -46,9 +56,13 @@ export default {
         this.showLoginModal = false
         document.body.classList.remove('modal-open')
       },
-      closeSignupModal(){
+      closeSignupModal(signedUp){
         this.showSignupModal = false
         document.body.classList.remove('modal-open')
+
+        if(signedUp){
+          this.$store.dispatch()
+        }
       }
     }
 }

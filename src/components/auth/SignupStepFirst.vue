@@ -19,12 +19,12 @@
     <UiFileAttachment
         label="Паспорт"
         placeholderTip="Прикрепить"
-        @handleFileChange="(...args) => onFileChange('passportImg', ...args)"
+        @handleFileChange="(...args) => onFileChange('passport', ...args)"
     />
     <UiFileAttachment
         label="Водительское удостоворение"
         placeholderTip="Прикрепить"
-        @handleFileChange="(...args) => onFileChange('driversLicense', ...args)"
+        @handleFileChange="(...args) => onFileChange('license', ...args)"
     />
     <UiFileAttachment
         label="Загрузите ваше Фото"

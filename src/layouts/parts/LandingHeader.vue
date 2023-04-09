@@ -3,9 +3,13 @@
     <div class="wrapper">
       <div class="logo">Лого</div>
       <MainNav type="mobile-hidden" @toggleMobileMenu="toggleMobileMenu"></MainNav>
-      <a class="signin" @click="openSigninModal">
+      <a v-if="user" class="signin" @click="toProfile">
         <img src="@/assets/img/icons/avatar.svg" alt="">
-        Войти
+        {{user.name}} 
+      </a>
+      <a v-else class="signin" @click="openSigninModal">
+        <img src="@/assets/img/icons/avatar.svg" alt="">
+        Войти 
       </a>
       <BurgerMenu v-if="isActive" @toggleMobileMenu="toggleMobileMenu"></BurgerMenu>
 
@@ -38,9 +42,17 @@ export default {
         showSignupModal: false,
       }
     },
+    computed: {
+      user() {
+        return this.$store.getters['user/getUser']
+      }
+    },
     methods: {
       toAdminPanel(){
         this.$router.push({name: 'AdminCarsharingStatus'})
+      },
+      toProfile() {
+        this.$router.push({name: 'Profile'})
       },
       toggleMobileMenu(){
         this.isActive = !this.isActive

@@ -73,19 +73,38 @@ export default {
             birthday: null,
             gender: '',
             email: '',
+            phone: '',
             password: '',
             confirmPassword: '',
             persDataAccessment: false,
         })
+
         const formData = new FormData()
 
         const onFileUpdate = (key, file) => {
-            formData.append(key, file)
+            formData.append(`profile[${key}]`, file)
         }
         const onSignupSubmit = async () => {
-            Object.keys(signupForm.value).forEach(key => {
-                formData.append(key, signupForm.value[key])
+                const userData = {
+                    name: signupForm.value.name,
+                    email: signupForm.value.email,
+                    password: signupForm.value.password,
+                    password_confirmation: signupForm.value.confirmPassword
+                }
+
+                const profileData = {
+                    birthday: signupForm.value.birthday,
+                    phone: signupForm.value.phone,
+                }
+
+            Object.keys(userData).forEach(key => {
+                formData.append(`user[${key}]`, userData[key])
             })
+
+            Object.keys(profileData).forEach(key => {
+                formData.append(`profile[${key}]`, profileData[key])
+            })
+
             await store.dispatch('user/signup', formData)
             emit('close')
         }
