@@ -5,15 +5,15 @@
       <h2>Иван Иванов</h2>
       <div class="profile__info-row">
         <h4>Дата рождения:</h4>
-        <p>25.07.1990</p>
+        <p>{{profile?.birthday ?? ''}}</p>
       </div>
       <div class="profile__info-row">
         <h4>Номер телефона:</h4>
-        <p>+7 (900) 555-60-60</p>
+        <p>{{profile?.phone ?? ''}}</p>
       </div>
       <div class="profile__info-row">
         <h4>E-mail:</h4>
-        <p>pochta@gmail.com</p>
+        <p>{{user?.email}}</p>
       </div>
     </div>
   </div>
@@ -33,10 +33,23 @@
 
 <script>
 import UiBtn from '@/components/ui/UiBtn.vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
 export default {
   name: 'ProfileView',
   components: { UiBtn },
+  setup() {
+    const store = useStore()
+
+    const user = computed(() => store.getters['user/getUser'])
+    const profile = computed(() => user?.value?.profile)
+
+    return {
+      user,
+      profile
+    }
+  }
 }
 </script>
 
