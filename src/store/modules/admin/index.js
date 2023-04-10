@@ -10,6 +10,7 @@ export default {
     },
     getters: {
         getUsers: state => state.users,
+        getUserById: (_, getters) => id => getters.getUsers.find(user => user.id == id),
         getArchivalSupportRequests: state => state.archivalSupportRequests,
         getPendingSupportRequests:  state => state.pendingSupportRequests,
         getStatistics: state => state.statistics,
@@ -18,7 +19,7 @@ export default {
     },
     mutations: {
         setUsers(state, payload) {
-            state.users = payload
+            state.users = payload.data
         },
         setArchivalSupportRequests(state, payload) {
             state.archivalSupportRequests = payload.data
@@ -30,13 +31,10 @@ export default {
             state.statistics = payload
         },
         setOrders(state, payload) {
-            console.log(payload)
             state.orders = payload.data
-            console.log(state.orders)
         }
     },
     actions: {
-        // BlackFlag: пересмотреть endpoints и параметры
         async fetchUsers({ commit }) {
             try {
                 const { data } = await axios.get('/user')
@@ -47,7 +45,7 @@ export default {
         }, 
         async deleteUser({ dispatch }, payload) {
             try {
-                const userId = payload
+                const userId = payload.userId
                 await axios.delete(`/user/${userId}`)
                 dispatch('fetchUsers')
             } catch (e) {
@@ -94,7 +92,7 @@ export default {
         async fetchOrdersByStatus({ commit }, payload) {
             try {
                 const status = payload
-                const { data } = await axios.get(`/order-process/${status}`)
+                const { data } = await axios.get(`/${status}`)
                 commit('setOrders', data)
             } catch (e) {
                 console.log(e)

@@ -15,7 +15,7 @@
         ><router-link :to="{
             name: 'AdminUserProfile', 
             params: {id: user.id}}"
-        >{{user.fullName}}</router-link></li>
+        >{{user.name}}</router-link></li>
     </ul>
 </template>
 
