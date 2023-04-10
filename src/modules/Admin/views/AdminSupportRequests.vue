@@ -8,11 +8,11 @@
     <ul class="support-requests-list">
         <li 
             v-for="request in supportRequestsList"
-            :key="request.id"
+            :key="request?.id"
         >
             <div class="support-requests-list__user">
-                <div>{{request.user.fullName}}</div>
-                <div>{{request.user.phoneNumber}}</div>
+                <div>{{request?.user?.name}}</div>
+                <div>{{request?.user?.phone}}</div>
             </div>
             <UiBtn width="165px" padding="1em" type="white" @click="complete(request.id)">Готово</UiBtn>
         </li>
@@ -42,9 +42,9 @@ export default {
         
         const showArchive = ref(false)
         const supportRequestsList = computed(() => {
-            return showArchive.value
-                    ? archivalSupportRequests
-                    : pendingSupportRequests
+            return showArchive.value == true
+                    ? archivalSupportRequests.value
+                    : pendingSupportRequests.value
         })
 
         const complete = requestId => {
