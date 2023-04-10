@@ -1,46 +1,48 @@
 <template>
     <ProfileSettingsForm title="Настройки" @onSubmit="onGeneralInfoChangeSubmit">
-        {{generalInfo}}
         <div class="profile__settings-row">
             <UiInput 
                 type="text"
                 label="Имя Фамилия"
-                v-model="generalInfo.name"
+                v-model="userInfo.name"
             />
             <UiInput 
                 type="date"
                 label="Дата рождения"
-                v-model="generalInfo.birthday"
+                v-model="profileInfo.birthday"
             />
         </div>
         <div class="profile__settings-row">
             <UiInput 
                 type="text"
                 label="Телефон"
-                v-model="generalInfo.phoneNumber"
+                v-model="profileInfo.phone"
             />
             <UiInput 
                 type="email"
                 label="E-mail"
-                v-model="generalInfo.email"
+                v-model="userInfo.email"
             />
         </div>
         <div class="profile__settings-row profile__settings-row--stretch">
             <UiFileAttachment 
                 label="Фото"
+                name="photo"
                 :isPhotoAttachment="true"
-                placeholderTip="Загрузить"
+                :placeholderTip="profileInfo?.photo?.name ?? 'Загрузить'"
                 @handleFileChange="onPhotoChange"
             />
             <div class="profile__settings-column">
                 <UiFileAttachment
                     label="Паспорт"
-                    placeholderTip="Прикрепить"
+                    name="passport"
+                    :placeholderTip="profileInfo?.passport?.name ?? 'Прикрепить'"
                     @handleFileChange="onPassportChange"
                 />
                 <UiFileAttachment
                     label="Водительское удостоворение" 
-                    placeholderTip="Прикрепить"
+                    name="license"
+                    :placeholderTip="profileInfo?.license?.name ?? 'Прикрепить'"
                     @handleFileChange="onDriversLicenseChange"
                 />
             </div>
@@ -60,38 +62,78 @@ export default {
     components: { UiInput, UiFileAttachment, ProfileSettingsForm },
     setup() {
         const store = useStore()
-        const userData = computed(() => store.getters['user/userProfileData'])
+        const user = computed(() => store.getters['user/getUser'])
+        const userProfileInfo = computed(() => store.getters['user/getUserProfileInfo'])
 
-        onMounted(() => store.dispatch('user/fetchUserProfileData'))
+        const profileInfo = ref({
+            birthday: null,
+            phone: null,
+            passport: null,
+            license: null,
+            photo: null,
+        })
 
-        // general
-        const generalInfo = ref({
-            name: userData.value?.name ?? '',
-            birthday: userData.value?.birthday ?? null,
-            phoneNumber: userData.value?.phoneNumber ?? '',
+        const media = ref({
+            passport: null,
+            license: null,
+            photo: null,
+        })
+
+        const userInfo = ref({
+            name: '',
+            email: ''
+        })
+
+        onMounted( async () => {
+            await store.dispatch('user/fetchUserProfileInfo', {userId: user.value.id})
+
+            profileInfo.value = Object.assign(userProfileInfo.value)
+            userInfo.value = Object.assign(user.value)
+            Object.keys(media.value).forEach(key => {
+                const field = profileInfo.value[key]
+                if(field) {
+                    const url = 'http://expocarsharing.localhost/users/' + profileInfo.value[key]
+
+                    const extension = field.slice(field.indexOf('.'))
+                    const fileName = key + user.value.id + extension
+
+                    fetch(url)
+                    .then(response => response.blob()) 
+                    .then(blob => {
+                        profileInfo.value[key] = new File([blob], fileName, {type: blob.type})
+                        
+                    })
+                }
+            }) 
         })
 
         const formData = new FormData()
 
         const onPhotoChange = file => {
+            profileInfo.value.photo = file
             formData.append('photo', file)
         }
         const onPassportChange = file => {
+            profileInfo.value.passport = file
             formData.append('passport', file)
         }
         const onDriversLicenseChange = file => {
-            formData.append('driversLicense', file)
+            profileInfo.value.license = file
+            formData.append('license', file)
         }
 
         const onGeneralInfoChangeSubmit = () => {
-            Object.keys(generalInfo.value).forEach(key => {
-                formData.append(key, generalInfo.value[key])
+            Object.keys(profileInfo.value).forEach(key => {
+                formData.append(key, profileInfo.value[key])
             })
+
+            store.dispatch('user/updateUser', userInfo.value)
             store.dispatch('user/updateProfile', formData)
         }
 
         return {
-            generalInfo,
+            userInfo,
+            profileInfo,
             onPhotoChange,
             onPassportChange,
             onDriversLicenseChange,

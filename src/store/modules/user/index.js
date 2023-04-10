@@ -28,8 +28,18 @@ export default {
             localStorage.setItem(TOKEN_KEY, token);
         },
         setUser(state, user) {
-            state.user = user
-            localStorage.setItem('user', JSON.stringify({id: user.id, name: user.name}));
+            state.user = {
+                id: user.id, 
+                name: user.name,
+                email: user.email
+            }
+
+            localStorage.setItem('user', JSON.stringify({
+                    id: user.id, 
+                    name: user.name,
+                    email: user.email
+                })
+            );
         },
         setUserCard(state, userCard) {
             state.userCard = userCard.data
@@ -65,21 +75,29 @@ export default {
                 console.log(e)
             }
         },
-        async fetchUserProfileInfo({ getters, commit }) {
+        async fetchUserProfileInfo({ commit }, payload) {
             try {
-                const { data } = await axios.get('endpoint', getters.token)
+                const { data } = await axios.get(`/user-profile/${payload.userId}`)
                 commit('setUserProfileInfo', data)
             } catch (e) {
                 console.log(e)
             }
         },
-        async updateProfile({ dispatch }, payload) {
+        async updateUser({ commit }, payload) {
+            try {
+                const { data } = await axios.patch(`/user/${payload.id}`, payload)
+                commit('setUser', data.data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async updateProfile({ commit }, payload) {
             try {
                 const headers = {
                     'Content-Type': 'multipart/form-data',
                 }
                 const { data } = await axios.post('/user-profile', payload, headers)
-                dispatch('setUserProfileInfo', data)
+                commit('setUserProfileInfo', data)
             } catch (e) {
                 console.log(e)
             }

@@ -14,7 +14,7 @@
         type="phone"
         label="Введите ваш Телефон"
         placeholder="+7 ___ ___ - __ - __" 
-        v-model="formModel.phoneNumber" 
+        v-model="formModel.phone" 
     />
     <UiFileAttachment
         label="Паспорт"

@@ -12,12 +12,14 @@
                 type="file"
                 multiple="multiple"
                 accept="image/*"
+                :name="name"
                 @change="$emit('handleFileChange', $event.target.files)"
             />
             <input 
                 v-else
                 type="file"
                 accept="image/*"
+                :name="name"
                 @change="$emit('handleFileChange', $event.target.files[0])"
             />
         </div>
@@ -26,9 +28,14 @@
 
 <script>
 export default {
+    name: 'UiFileAttachment',
     props: {
         modelValue: {
             type: File
+        },
+        name: {
+            type: String,
+            requied: false,
         },
         isPhotoAttachment: {
             type: Boolean,
@@ -65,11 +72,13 @@ export default {
         div{
             position: absolute;
             width: fit-content;
+            max-width: 92%;
             right: 0;
             left: 0; 
             top: 50%;
             transform: translateY(-50%);
             margin: auto;
+            overflow: hidden;
         }
 
         input[type=file] {
