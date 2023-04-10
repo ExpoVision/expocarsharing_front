@@ -2,7 +2,9 @@
   <div class="offer" :class="{'offer--small': size == 'small'}">
     <img src="@/assets/img/single_car.png" alt="" class="offer__img">
     <div class="offer__info">
-        <h3 v-if="isOffer" class="offer__title">{{offer.vehicle.name}}</h3>
+        <h3 v-if="isOffer" class="offer__title">
+            {{offer.vehicle.brand.name}} {{offer.vehicle.model.name}}
+        </h3>
         <h3 v-else class="offer__title">{{offer.brand.name}} {{offer.model.name}}</h3>
         <div class="offer__columns">
             <div>
@@ -33,6 +35,8 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
+
 export default {
     name: 'OfferComponent',
     props: {
@@ -42,6 +46,14 @@ export default {
             type: Boolean,
             required: false,
             default: true,
+        }
+    },
+    setup(props) {
+        const router = useRouter()
+        const onOfferClick = () => router.push({name: 'OfferView', params: {id: props.offer.id}})
+
+        return {
+            onOfferClick
         }
     }
 }

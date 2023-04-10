@@ -44,16 +44,16 @@ export default {
       this.currentPage = page;
     }
 
-    onMounted(() => {
-      store.dispatch('carsharing/fetchOffers')
+    onMounted(async () => {
+      await store.dispatch('carsharing/fetchOffers')
     })
 
-    const onApplyFilters = filters => {
-      store.dispatch('carsharing/fetchOffers', filters.value)
+    const onApplyFilters = async filters => {
+      await store.dispatch('carsharing/fetchOffers', {filters})
     }
 
-    const onResetFilters = () => {
-        store.dispatch('carsharing/fetchOffers')
+    const onResetFilters = async () => {
+      await store.dispatch('carsharing/fetchOffers')
     }
 
     return {

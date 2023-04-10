@@ -51,7 +51,7 @@ import { useStore } from 'vuex'
 
 export default {
     components: { UiFilterSelect },
-    emits: ['applyFlters', 'resetFilters'],
+    emits: ['applyFilters', 'resetFilters'],
     setup(_, { emit }) {
         
         const store = useStore()

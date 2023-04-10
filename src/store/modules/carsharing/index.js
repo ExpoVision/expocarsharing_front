@@ -38,17 +38,17 @@ export default {
     },
     actions: {
         //offer.index
-        async fetchVehicles({ commit }, filters) {
+        async fetchVehicles({ commit }, payload) {
             try {
-                const response = await axios.get('/vehicle', filters ?? null)
+                const response = await axios.get('/vehicle', payload?.filters ?? null)
                 commit('setVehicles', response.data)
             } catch (e) {
                 console.log(e)
             }
         },
-        async fetchOffers({ commit }, filters) {
+        async fetchOffers({ commit }, payload) {
             try {
-                const response = await axios.get('/offer', filters ?? null)
+                const response = await axios.get('/offer', payload?.filters ?? null)
                 commit('setOffers', response.data)
             } catch (e) {
                 console.log(e)

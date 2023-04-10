@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Добавление</h2>
-    <form action="">
+    <form @submit.prevent="onAddCar">
         <div class="selects">
             <UiSelect
                 title="Марка" 
@@ -34,12 +34,12 @@
             :multiple="true" 
             @handleFileChange="onMediaUpload"
         />
-        <UiBtn type="white" @click="onAddCar" width="100%">Добавить</UiBtn>
+        <UiBtn type="white" width="100%">Добавить</UiBtn>
     </form>
   </div>
   <div class="delete-block">
     <h2>Удаление</h2>
-    <form>
+    <form @submit.prevent="onDeleteCar">
         <div class="selects filters">
             <UiFilterSelect 
                 title="Марка" 
@@ -72,7 +72,7 @@
             />
         </div>
         
-        <UiBtn type="white" @click="onDeleteCar" width="100%">Удалить</UiBtn>
+        <UiBtn type="white" width="100%">Удалить</UiBtn>
     </form>
   </div>
 </template>
@@ -110,10 +110,10 @@ export default {
 
         const formData = new FormData()
 
-        onMounted(() => {
-            store.dispatch('carsharing/fetchVehicles')
-            store.dispatch('carsharing/fetchOffers')
-            store.dispatch('carsharing/fetchFilterValues')
+        onMounted(async () => {
+            await store.dispatch('carsharing/fetchVehicles')
+            await store.dispatch('carsharing/fetchOffers')
+            await store.dispatch('carsharing/fetchFilterValues')
         })
         const filtersDictionaries = computed(() => store.getters['carsharing/getFilterValues'])
         const pricesDictionary = computed(() => store.getters['carsharing/getPricesDictionary'])
@@ -128,7 +128,7 @@ export default {
             Object.keys(carProperties.value).forEach(key => {
                 formData.append(key, carProperties.value[key])
             })
-            store.dispatch('admin/addNewCar', carProperties)
+            store.dispatch('admin/addCar', carProperties)
             store.dispatch('carsharing/fetchOffers')
         }
 
@@ -151,17 +151,17 @@ export default {
         const onDeleteCar = () => {
             if(selectedCarId.value) {
                 store.dispatch('admin/deleteCar', selectedCarId.value)
-                store.dispatch('carsharing/fetchOffers')
+                store.dispatch('carsharing/fetchVehicles')
             }
         }
 
         const onApplyFilters = filters => {
-            store.dispatch('carsharing/fetchOffers', filters.value)
+            store.dispatch('carsharing/fetchVehicles', {filters})
         }
 
         const onResetFilters = () => {
             filters.value = {...INITIAL_FILTERS}
-            store.dispatch('carsharing/fetchOffers')
+            store.dispatch('carsharing/fetchVehicles')
         }
 
         return {
