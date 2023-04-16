@@ -13,7 +13,7 @@
                 <div class="characteristics__list">
                     <div class="characteristics__item">
                         <h4>Марка:</h4>
-                        <span>{{offer?.vehicle.brand}}</span>
+                        <span>{{offer?.vehicle?.brand.name}}</span>
                     </div>
                     <div class="characteristics__item">
                         <h4>Средняя стоимость аренды в час:</h4>
@@ -21,28 +21,28 @@
                     </div>
                     <div class="characteristics__item">
                         <h4>Объём лошадиных сил:</h4>
-                        <span>422 л.с.</span>
+                        <span>{{offer?.vehicle?.info?.horsepower}} л.с.</span>
                     </div>
                     <div class="characteristics__item">
                         <h4>Кол/во посадочных мест:</h4>
-                        <span>4</span>
+                        <span>{{offer?.vehicle?.info?.seats ?? 0}}</span>
                     </div>
                     <div class="characteristics__item">
                         <h4>Расход топлива:</h4>
-                        <span>4.0 л.</span>
+                        <span>{{offer?.vehicle?.info?.consumption}} л.</span>
                     </div>
                     
                     <div class="characteristics__item">
                         <h4>Тип коробки передач:</h4>
-                        <span>механическая</span>
+                        <span>{{transmission}}</span>
                     </div>
                     <div class="characteristics__item">
                         <h4>Запас хода полный бак:</h4>
-                        <span>700 км</span>
+                        <span>{{offer?.vehicle?.info?.power_reserve ?? 0}} {{powerReserveUnit}}</span>
                     </div>
                     <div class="characteristics__item">
                         <h4>Мультимедиа / встроенный навигатор:</h4>
-                        <span>есть</span>
+                        <span>{{offer?.vehicle?.info?.multimedia ? 'есть' : 'нет'}}</span>
                     </div>
                 </div>
             </div>
@@ -70,18 +70,31 @@ export default {
         const store = useStore()
         const route = useRoute()
 
-        const offerId = route.params.id
+        const vehicleId = route.params.id
 
-        const offer = computed(() => store.getters['carsharing/getOfferByCarId'](offerId))
-
-        onMounted(() => {
-            if(store.getters['carsharing/getOffers'] == []) {
-                store.dispatch('carsharing/fetchOffers')
+        const offer = computed(() => store.getters['carsharing/getOfferByCarId'](vehicleId))
+        const filterConsts = computed(() => store.getters['carsharing/getFilterConsts'])
+        const powerReserveUnit = computed(() => {
+            return filterConsts?.value?.units?.[offer?.value?.vehicle?.info?.power_reserve_unit]
+        })
+        const transmission = computed(() => {
+            return filterConsts?.value?.transmissions?.[offer?.value?.vehicle?.info?.transmission]
+        })
+        
+        onMounted(async () => {
+            if(!store.getters['carsharing/getOffers'].length) {
+                await store.dispatch('carsharing/fetchOffers')
             }
+            await store.dispatch('carsharing/fetchFilterConsts')
         })
 
+        
+
         return {
-            offer
+            offer,
+            powerReserveUnit,
+            transmission,
+            filterConsts
         }
     }
 }

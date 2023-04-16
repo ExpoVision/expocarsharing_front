@@ -1,5 +1,5 @@
 <template>
-  <div class="offer" :class="{'offer--small': size == 'small'}">
+  <div class="offer" :class="{'offer--small': size == 'small'}" @click="onOfferClick">
     <img src="@/assets/img/single_car.png" alt="" class="offer__img">
     <div class="offer__info">
         <h3 v-if="isOffer" class="offer__title">
@@ -50,7 +50,12 @@ export default {
     },
     setup(props) {
         const router = useRouter()
-        const onOfferClick = () => router.push({name: 'OfferView', params: {id: props.offer.id}})
+        const onOfferClick = () => router.push({
+                    name: 'OfferView', 
+                    params: {
+                        id: props.offer.vehicle.id
+                    }
+                })
 
         return {
             onOfferClick

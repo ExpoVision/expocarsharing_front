@@ -12,11 +12,11 @@
                   :offer="offer"
               />
           </div>
-          <UiPagination 
+          <!-- <UiPagination 
             :items="offers"
             :perPage="6"
             @onPageChange="onPageChange"
-          />
+          /> -->
       </div>
       <FeedbackComponent />
   </main>
@@ -26,13 +26,13 @@
 import OfferComponent from '@/components/OfferComponent.vue'
 import FeedbackComponent from '@/modules/Landing/Sections/FeedbackSection.vue'
 import FiltersComponent from '@landing/components/FiltersComponent.vue'
-import UiPagination from '@/components/ui/UiPagination.vue'
+/* import UiPagination from '@/components/ui/UiPagination.vue' */
 import { useStore } from 'vuex'
 import { ref, computed, onMounted } from 'vue'
 
 export default {
   name: 'CatalogView',
-  components: { OfferComponent, FeedbackComponent, FiltersComponent, UiPagination },
+  components: { OfferComponent, FeedbackComponent, FiltersComponent, /* UiPagination */ },
   setup() {
     const store = useStore()
 
