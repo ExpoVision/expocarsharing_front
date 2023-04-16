@@ -7,6 +7,7 @@ export default {
         offers: [],
         offersByClasses: [],
         filterValues: [],
+        filterConsts: [],
         pricesDictionary: {
             1: 'до 10 000 ₽',
             2: 'от  10 000 ₽ до 20 000 ₽',
@@ -20,6 +21,7 @@ export default {
         getOffersByClasses: state => state.offersByClasses.data,
         getOfferByCarId: (_, getters) => id => getters.getOffers.find(({vehicle}) => vehicle.id == id),
         getFilterValues: state => state.filterValues,
+        getFilterConsts: state => state.filterConsts,
         getPricesDictionary: state => state.pricesDictionary
     },
     mutations: {
@@ -35,6 +37,9 @@ export default {
         setFilterValues(state, payload) {
             state.filterValues = payload
         },
+        setFilterConsts(state, payload) {
+            state.filterConsts = payload
+        }
     },
     actions: {
         //offer.index
@@ -66,6 +71,14 @@ export default {
             try {
                 const response = await axios.get('/filter-values')
                 commit('setFilterValues', response.data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async fetchFilterConsts({ commit }) {
+            try {
+                const response = await axios.get('/filter-consts')
+                commit('setFilterConsts', response.data)
             } catch (e) {
                 console.log(e)
             }

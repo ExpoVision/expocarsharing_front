@@ -4,6 +4,7 @@
       <input 
         class="ui-input"
         :type="type"
+        :min="type == 'number' ? 0 : ''"
         :placeholder="placeholder"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
@@ -13,6 +14,7 @@
       v-else
       class="ui-input ui-input--single"
       :type="type"
+      :min="type == 'number' ? 0 : ''"
       :placeholder="placeholder"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"

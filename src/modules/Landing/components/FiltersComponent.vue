@@ -13,11 +13,12 @@
                 type="radio"
                 v-model="filters.price" 
             />
-            <!-- <UiFilterSelect 
-                title="Тип" 
-                :items="typesDictionary" 
-                v-model="filters.types"
-            /> -->
+            <UiFilterSelect 
+                title="Тип кузова" 
+                :items="filtersDictionaries?.bodyTypes" 
+                column="single-column"
+                v-model="filters.bodyTypes"
+            />
             <UiFilterSelect 
                 title="Цвет" 
                 :items="filtersDictionaries?.colors" 
@@ -88,7 +89,7 @@ export default {
         const INITIAL_FILTERS = {
             brands: [],
             price: [],
-            types: [],
+            bodyTypes: [],
             colors: [],
             sortBy: sort.value
         }

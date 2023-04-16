@@ -63,6 +63,7 @@ export default {
     background: rgba(11, 11, 11, 0.9);
     backdrop-filter: blur(40px);
     padding: 1.5em 2em;
+    padding-right: 3.5em;
     -webkit-appearance: none;
     appearance: none;
     outline: none;

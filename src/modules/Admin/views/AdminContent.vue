@@ -6,27 +6,51 @@
             <UiSelect
                 title="Марка" 
                 :options="filtersDictionaries.brands"
-                @change="(...args) => onSelectChange('brand', ...args)"
+                @change="(...args) => onVehicleSelectChange('brand_id', ...args)"
             />
             <UiSelect 
                 title="Модель" 
-                :items="filtersDictionaries.brandModels" 
-                @change="(...args) => onSelectChange('model', ...args)"
+                :options="filtersDictionaries.brandModels" 
+                @change="(...args) => onVehicleSelectChange('brand_model_id', ...args)"
             />
             <UiSelect
                 title="Кузов" 
-                :options="filtersDictionaries.type"
-                @change="(...args) => onSelectChange('type', ...args)"
+                :options="filtersDictionaries.bodyTypes"
+                @change="(...args) => onVehicleInfoSelectChange('body_type_id', ...args)"
             />
             <UiSelect
                 title="Цвет" 
                 :options="filtersDictionaries.colors"
-                @change="(...args) => onSelectChange('color', ...args)"
+                @change="(...args) => onVehicleSelectChange('color_id', ...args)"
             />
-            <UiInput placeholder="Мощность" v-model="carProperties.power" />
-            <UiInput placeholder="Стоимость" v-model="carProperties.price" />
-            <UiInput placeholder="Год" v-model="carProperties.year" />
-            <UiInput placeholder="Гос. номер" v-model="carProperties.govNumber" />
+            <UiSelect
+                title="Класс" 
+                :options="filtersDictionaries.classes"
+                @change="(...args) => onVehicleSelectChange('vehicle_class_id', ...args)"
+            />
+            <UiSelect
+                title="Тип коробки передач" 
+                :options="filterConsts.transmissions"
+                @change="(...args) => onVehicleInfoSelectChange('transmission', ...args)"
+            />
+            <UiSelect
+                title="Мультимедиа / встроенный навигатор:" 
+                :options="multimedia"
+                @change="(...args) => onVehicleInfoSelectChange('multimedia', ...args)"
+            />
+            <UiInput type="number" placeholder="Кол/во посадочных мест" v-model="vehicleInfo.seats" />
+            <UiInput placeholder="Мощность" v-model="vehicleInfo.horsepower" />
+            <UiInput placeholder="Стоимость" v-model="offer.per_minute" />
+            <UiInput type="number" placeholder="Год" v-model="vehicle.year" />
+            <UiInput placeholder="Пробег" v-model="vehicle.mileage" />
+            <UiInput placeholder="Гос. номер" v-model="vehicle.license_plate" />
+            <UiInput placeholder="Расход топлива" v-model="vehicleInfo.consumption" />
+            <UiInput placeholder="Запас хода полный бак" v-model="vehicleInfo.power_reserve" />
+            <UiSelect
+                title="Единица измерения" 
+                :options="filterConsts.units"
+                @change="(...args) => onVehicleInfoSelectChange('power_reserve_unit', ...args)"
+            />
         </div>
         <UiFileAttachment 
             label="Фото" 
@@ -92,44 +116,73 @@ export default {
     setup() {
         const store = useStore()
 
-        // добавление
-        const carProperties = ref({
-            brand: '',
-            model: '',
-            type: '',
-            color: '',
-            power: '',
-            price: '',
-            year: '',
-            govNumber: '',
-        })
-
-        const onSelectChange = (key, newValue) => {
-            carProperties.value[key] = newValue
-        }
-
-        const formData = new FormData()
-
         onMounted(async () => {
             await store.dispatch('carsharing/fetchVehicles')
             await store.dispatch('carsharing/fetchOffers')
             await store.dispatch('carsharing/fetchFilterValues')
+            await store.dispatch('carsharing/fetchFilterConsts')
         })
+
         const filtersDictionaries = computed(() => store.getters['carsharing/getFilterValues'])
         const pricesDictionary = computed(() => store.getters['carsharing/getPricesDictionary'])
+        const filterConsts = computed(() => store.getters['carsharing/getFilterConsts'])
+
+        // добавление
+        const multimedia = ref({
+            0: 'нет',
+            1: 'есть'
+        })
+        const vehicle = ref({
+            brand_id: '',
+            brand_model_id: '',
+            color_id: '',
+            year: '',
+            license_plate: '',
+            mileage: ''
+        })
+
+        const vehicleInfo = ref({
+            body_type_id: '',
+            consumption: '',
+            horsepower: '',
+            power_reserve_unit: '',
+            transmission: '',
+            seats: '',
+            multimedia: '',
+        })
+
+        const offer = ref({
+            per_minute: ''
+        })
+
+        const onVehicleSelectChange = (key, newValue) => {
+            vehicle.value[key] = newValue
+        }
+
+        const onVehicleInfoSelectChange = (key, newValue) => {
+            vehicleInfo.value[key] = newValue
+        }
+
+        const formData = new FormData()
 
         const cars = computed(() => store.getters['carsharing/getVehicles'])
 
         const onMediaUpload = files => {
-            files.forEach(file => formData.append('images', file))
+            Array.from(files).forEach(file => formData.append('vehicle[images][]', file))
         }
 
-        const onAddCar = () => {
-            Object.keys(carProperties.value).forEach(key => {
-                formData.append(key, carProperties.value[key])
+        const onAddCar = async () => {
+            Object.keys(vehicle.value).forEach(key => {
+                formData.append(`vehicle[${key}]`, vehicle.value[key])
             })
-            store.dispatch('admin/addCar', carProperties)
-            store.dispatch('carsharing/fetchOffers')
+            Object.keys(vehicleInfo.value).forEach(key => {
+                formData.append(`vehicle_info[${key}]`, vehicleInfo.value[key])
+            })
+
+            formData.append(`offer[per_minute]`, offer.value.per_minute)
+
+            await store.dispatch('admin/addCar', formData)
+            await store.dispatch('carsharing/fetchOffers')
         }
 
         // удаление
@@ -166,13 +219,18 @@ export default {
 
         return {
             cars,
-            carProperties,
+            vehicle,
+            vehicleInfo,
+            offer,
             filtersDictionaries,
+            filterConsts,
+            multimedia,
             pricesDictionary,
             filters,
 
             //methods
-            onSelectChange,
+            onVehicleSelectChange,
+            onVehicleInfoSelectChange,
             onApplyFilters,
             onResetFilters,
             onMediaUpload,
