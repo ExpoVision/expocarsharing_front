@@ -9,8 +9,9 @@
             <UiFilterSelect 
                 title="Цена" 
                 :items="pricesDictionary" 
-                type="single-column"
-                v-model="filters.prices" 
+                column="single-column"
+                type="radio"
+                v-model="filters.price" 
             />
             <!-- <UiFilterSelect 
                 title="Тип" 
@@ -71,7 +72,7 @@ export default {
 
         // значения для соотношения ключей prices dictionary 
         const PRICES = {
-            1: [undefined, 10000],
+            1: ['', 10000],
             2: [10000, 20000],
             3: [20000, 40000],
             4: [40000, 80000],
@@ -86,7 +87,7 @@ export default {
 
         const INITIAL_FILTERS = {
             brands: [],
-            prices: [],
+            price: [],
             types: [],
             colors: [],
             sortBy: sort.value
@@ -96,7 +97,7 @@ export default {
 
         // применить фильтры
         const applyFilters = () => {
-            filters.value.prices = filters.value.prices.map(item => PRICES[item])
+            filters.value.price = PRICES[filters.value.price]
             emit('applyFilters', filters.value)
         }
 

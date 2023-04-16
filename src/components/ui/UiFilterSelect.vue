@@ -6,12 +6,20 @@
       </div>
       <div class="filter__body">
         <div class="filter__block">
-          <div class="filter__checkboxes" :class="{'filter__checkboxes--single-column': type === 'single-column'}">
+          <div class="filter__checkboxes" :class="{'filter__checkboxes--single-column': column === 'single-column'}">
               <label 
                   v-for="(item, index) in items"
                   :key="index"
               >
                   <input 
+                      v-if="type == 'radio'"
+                      type="radio"
+                      :value="index"
+                      v-model="checkedItems"
+                      @change="$emit('update:modelValue', checkedItems)"
+                  >
+                  <input 
+                      v-else
                       type="checkbox"
                       :value="index"
                       v-model="checkedItems"
@@ -34,9 +42,13 @@ import { ref } from 'vue'
     props: { 
       title: String,
       items: Object,
-      type: {
+      column: {
         type: String,
         required: false,
+      },
+      type: {
+        type: String,
+        required: false
       }
     },
     setup() {

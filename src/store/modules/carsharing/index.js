@@ -40,7 +40,7 @@ export default {
         //offer.index
         async fetchVehicles({ commit }, payload) {
             try {
-                const response = await axios.get('/vehicle', payload?.filters ?? null)
+                const response = await axios.get('/vehicle', {params: payload?.filters ?? null})
                 commit('setVehicles', response.data)
             } catch (e) {
                 console.log(e)
@@ -48,7 +48,7 @@ export default {
         },
         async fetchOffers({ commit }, payload) {
             try {
-                const response = await axios.get('/offer', payload?.filters ?? null)
+                const response = await axios.get('/offer', {params: payload?.filters ?? null})
                 commit('setOffers', response.data)
             } catch (e) {
                 console.log(e)

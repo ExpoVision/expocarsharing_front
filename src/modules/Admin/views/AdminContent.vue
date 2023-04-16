@@ -50,7 +50,7 @@
                 title="Модель" 
                 :items="filtersDictionaries.brandModels" 
                 :isBlocks="true"
-                v-model="filters.models"
+                v-model="filters.brandmodels"
             />
             <button 
                 class="filters__btn filters__btn--apply" 
@@ -135,8 +135,8 @@ export default {
         // удаление
 
         const INITIAL_FILTERS = {
-            brand: '',
-            model: ''
+            brands: [],
+            brandmodels: []
         } 
         const filters = ref({...INITIAL_FILTERS})
         const selectedCarId = ref(null)
@@ -155,8 +155,8 @@ export default {
             }
         }
 
-        const onApplyFilters = filters => {
-            store.dispatch('carsharing/fetchVehicles', {filters})
+        const onApplyFilters = () => {
+            store.dispatch('carsharing/fetchVehicles', {filters: filters.value})
         }
 
         const onResetFilters = () => {
