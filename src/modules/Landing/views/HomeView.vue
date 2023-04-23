@@ -9,13 +9,18 @@
         </ui-btn>
       </div>
     </section>
-    <SliderSection 
+    <template
       v-for="carsBlock in carsByClasses"
       :key="carsBlock.id"
-      :title="carsBlock.name" 
-      :elements="carsBlock.offers" 
-      type="offers" 
-    />
+    >
+      <SliderSection 
+        v-if="carsBlock.offers.length"
+        :title="carsBlock.name" 
+        :elements="carsBlock.offers" 
+        type="offers" 
+      />
+    </template>
+    
     <TestimonialsSection />
     <FaqSection />
     <FeedbackSection />

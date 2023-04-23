@@ -18,7 +18,7 @@ export default {
     getters: {
         getVehicles: state => state.vehicles,
         getOffers: state => state.offers,
-        getOffersByClasses: state => state.offersByClasses.data,
+        getOffersByClasses: state => state.offersByClasses,
         getOfferByCarId: (_, getters) => id => getters.getOffers.find(({vehicle}) => vehicle.id == id),
         getFilterValues: state => state.filterValues,
         getFilterConsts: state => state.filterConsts,
