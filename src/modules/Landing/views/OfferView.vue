@@ -160,7 +160,7 @@ export default {
                 }
 
                 h4{
-                    color: $purple-opacity;
+                    color: $purple;
                     margin-right: 8px;
                     font-weight: 400;
                     text-transform: none;

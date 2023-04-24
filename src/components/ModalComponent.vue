@@ -122,6 +122,10 @@ export default {
         .ui-input-label {
             display: block;
             margin-bottom: 29px;
+
+            span{
+                color: $purple;
+            }
         }
 
         .ui-btn {

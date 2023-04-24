@@ -164,7 +164,6 @@ export default {
         &__selects{
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
             align-items: start;
             gap: 1.875em;
             margin: 2.375em 0;
