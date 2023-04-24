@@ -5,15 +5,33 @@
                 <h1>Условия</h1>
                 <nav class="terms__header-nav">
                     <ul>
-                        <li><a href="#">Свободные машины</a></li>
-                        <li><a href="#">Способы оплаты</a></li>
-                        <li><a href="#">Часто задаваемые вопросы</a></li>
+                        <li>
+                            <a
+                                href="#freeCarsSection"
+                                data-anchor="freeCarsSection"
+                                @click="onAnchorLinkClick"
+                            >Свободные машины</a>
+                        </li>
+                        <li>
+                            <a
+                                href="#paymentSection"
+                                data-anchor="paymentSection"
+                                @click="onAnchorLinkClick"
+                            >Способы оплаты</a>
+                        </li>
+                        <li>
+                            <a
+                                href="#faqSection"
+                                data-anchor="faqSection"
+                                @click="onAnchorLinkClick"
+                            >Часто задаваемые вопросы</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
         </section>
        
-        <section class="terms__filters">
+        <section class="terms__filters" id="freeCarsSection">
             <div class="wrapper">
                 <h2 class="heading">Cвободные<br> машины</h2>
                 <FiltersComponent 
@@ -23,7 +41,7 @@
             </div>
         </section>
         <PaymentSection />
-        <FaqComponent /> 
+        <FaqSection /> 
         <FeedbackSection />
     </main>
   </template>
@@ -31,43 +49,43 @@
   <script>
 import FeedbackSection from '@/modules/Landing/Sections/FeedbackSection.vue'
 import FiltersComponent from '@landing/components/FiltersComponent.vue'
-import FaqComponent from '@/modules/Landing/Sections/FaqSection.vue'
+import FaqSection from '@/modules/Landing/Sections/FaqSection.vue'
 import PaymentSection from '@/modules/Landing/Sections/PaymentSection.vue'
 import { useStore } from 'vuex'
 
   export default {
     name: 'CatalogView',
-    components: { FiltersComponent, FeedbackSection, FaqComponent, PaymentSection },
+    components: { FiltersComponent, FeedbackSection, FaqSection, PaymentSection },
     setup() {
         const store = useStore()
 
-        const cars = [
-            {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-            {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-            {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-            {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-            {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-            {title: 'MERCEDES E220D', year: 2011, mileage: 166000, color: 'Коричневый', price: 16},
-        ]
-
         const onApplyFilters = filters => {
-            store.dispatch('carsharing/fetchCars', filters.value)
+            store.dispatch('carsharing/fetchCars', {filters})
         }
 
         const onResetFilters = () => {
             store.dispatch('carsharing/fetchCars')
         }
-        return {
-            cars,
 
+        const onAnchorLinkClick = e => {
+            e.preventDefault()
+            const hash = e.target.attributes['data-anchor'].value
+            document.getElementById(hash)?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
+        }
+        return {
             onApplyFilters, 
             onResetFilters,
+            onAnchorLinkClick,
         }
     }
   }
   </script>
   
   <style lang="scss" scoped>
+    * {scroll-behavior: smooth;}
     .terms{
 
         h1{

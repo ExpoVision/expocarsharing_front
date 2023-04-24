@@ -1,5 +1,5 @@
 <template>
-    <section class="payment">
+    <section class="payment" id="paymentSection">
       <div class="wrapper">
         <h2 class="heading payment__heading">Cпособы<br> оплаты</h2>
         <p class="payment__text">Оплата в размере 100% суммы договора производится<br> в момент передачи автомобиля:</p>
