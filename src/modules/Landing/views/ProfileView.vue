@@ -1,11 +1,11 @@
 <template>
   <div class="profile__info">
-    <img src="@/assets/img/profile_avatar.png" alt="">
+    <img :src="BASE_URL + 'users/' + profile?.photo" alt="">
     <div>
       <h2>Иван Иванов</h2>
       <div class="profile__info-row">
         <h4>Дата рождения:</h4>
-        <p>{{profile?.birthday ?? ''}}</p>
+        <p>{{birthday}}</p>
       </div>
       <div class="profile__info-row">
         <h4>Номер телефона:</h4>
@@ -34,7 +34,9 @@
 <script>
 import UiBtn from '@/components/ui/UiBtn.vue'
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+
+import { BASE_URL } from '@/config/index'
 
 export default {
   name: 'ProfileView',
@@ -43,11 +45,21 @@ export default {
     const store = useStore()
 
     const user = computed(() => store.getters['user/getUser'])
-    const profile = computed(() => user?.value?.profile)
+    const profile = computed(() => store.getters['user/getUserProfileInfo'])
+    const birthday = computed(() => {
+      return profile?.value?.birthday 
+            ? new Date(profile?.value?.birthday).toLocaleDateString()
+            : ''
+    })
 
+    onMounted( async () => {
+      await store.dispatch('user/fetchUserProfileInfo', {userId: user?.value?.id})
+    })
     return {
       user,
-      profile
+      profile,
+      birthday,
+      BASE_URL
     }
   }
 }

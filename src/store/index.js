@@ -5,7 +5,10 @@ import carsharing from '@/store/modules/carsharing'
 import admin from '@/store/modules/admin'
 import user from '@/store/modules/user'
 
-axios.defaults.baseURL = 'http://expocarsharing.localhost/api/v1'
+import { BASE_API_URL } from '@/config/index'
+
+
+axios.defaults.baseURL = BASE_API_URL
 
 
 axios.interceptors.request.use((config) => {

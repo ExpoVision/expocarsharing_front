@@ -57,6 +57,8 @@ import ProfileSettingsForm from '@/modules/Landing/components/ProfileSettingsFor
 import { useStore } from 'vuex'
 import { ref, computed, onMounted } from 'vue'
 
+import { BASE_URL } from '@/config/index'
+
 export default {
     name: 'ProfileView',
     components: { UiInput, UiFileAttachment, ProfileSettingsForm },
@@ -92,7 +94,7 @@ export default {
             Object.keys(media.value).forEach(key => {
                 const field = profileInfo.value[key]
                 if(field) {
-                    const url = 'http://expocarsharing.localhost/users/' + profileInfo.value[key]
+                    const url = BASE_URL + 'users/' + profileInfo.value[key]
 
                     const extension = field.slice(field.indexOf('.'))
                     const fileName = key + user.value.id + extension

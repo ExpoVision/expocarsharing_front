@@ -2,14 +2,16 @@
     <div class="single-offer__slider slider">
         <button class="slider__toLeftBtn" @click="toLeft"><img src="@/assets/img/icons/arrow-left-purple.svg" alt=""></button>
         <button class="slider__toRightBtn" @click="toRight"><img src="@/assets/img/icons/arrow-right-purple.svg" alt=""></button>
+        
         <div class="slider__wrapper">
             <div class="slider__items" ref="slider">
                 <div 
                     class="slider__item"
-                    v-for="(media, index) in offer.vehicle.media"
+                    v-for="(image, index) in images"
                     :key="index"
                 >
-                    <img src="@/assets/img/single_car.png" alt="">
+                    <img :src="BASE_URL + image?.path" alt="">
+                   <!--  <img src="@/assets/img/single_car.png" alt=""> -->
                 </div>
             </div>
         </div>
@@ -18,11 +20,12 @@
 
 <script>
 import { ref, computed, watch } from 'vue'
+import { BASE_URL } from '@/config/index'
 
 export default {
     name: 'SingleCarSliderSection',
     props: {
-        media: Array
+        images: Array
     },
     setup(props) {
         const slider = ref(null)
@@ -31,7 +34,7 @@ export default {
         let position = 1;
         let direction;
 
-        const sliderSize = Math.ceil(props.media.length / slidesNumberPerPage);
+        const sliderSize = Math.ceil(props.images.length / slidesNumberPerPage);
         const sliderWidth = computed(() => {
             return sliderSize * 100;
         })
@@ -68,7 +71,8 @@ export default {
         return {
             toLeft,
             toRight,
-            slider
+            slider,
+            BASE_URL
         }
     }
 }

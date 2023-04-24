@@ -1,6 +1,17 @@
 <template>
   <div class="offer" :class="{'offer--small': size == 'small'}" @click="onOfferClick">
-    <img src="@/assets/img/single_car.png" alt="" class="offer__img">
+    <img
+        v-if="offer?.vehicle?.images.length"
+        :src="BASE_URL + offer?.vehicle?.images[0]?.path" 
+        class="offer__img"
+        alt=""
+    >
+    <img
+        v-else
+        src="@/assets/img/single_car.png"
+        class="offer__img"
+        alt=""
+    >
     <div class="offer__info">
         <h3 v-if="isOffer" class="offer__title">
             {{offer.vehicle.brand.name}} {{offer.vehicle.model.name}}
@@ -37,6 +48,8 @@
 <script>
 import { useRouter } from 'vue-router'
 
+import { BASE_URL } from '@/config/index'
+
 export default {
     name: 'OfferComponent',
     props: {
@@ -58,7 +71,8 @@ export default {
                 })
 
         return {
-            onOfferClick
+            onOfferClick,
+            BASE_URL
         }
     }
 }

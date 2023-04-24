@@ -3,7 +3,10 @@
         <section class="single-offer__header">
             <div class="wrapper">
                 <h1>{{offer?.vehicle.brand.title}} {{offer?.vehicle.model.title}}</h1>
-                <OfferSliderSection v-if="offer?.vehicle.media" :media="offer?.vehicle.media" />
+                <OfferSliderSection
+                    v-if="offer?.vehicle?.images"
+                    :images="offer?.vehicle?.images"
+                />
             </div>
         </section>
        
