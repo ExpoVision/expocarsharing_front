@@ -2,7 +2,7 @@
   <div class="profile__info">
     <img :src="BASE_URL + 'users/' + profile?.photo" alt="">
     <div>
-      <h2>Иван Иванов</h2>
+      <h2>{{user?.name}}</h2>
       <div class="profile__info-row">
         <h4>Дата рождения:</h4>
         <p>{{birthday}}</p>
