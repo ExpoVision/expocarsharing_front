@@ -200,6 +200,7 @@ export default {
 
                 img{
                     margin-right: .875em;
+                    pointer-events: none;
                 }
             }
         }

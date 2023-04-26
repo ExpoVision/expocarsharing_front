@@ -114,7 +114,7 @@ export default {
             width: 95%;
 
             &__heading {
-                font-size: 3rem;
+                font-size: 2.3rem;
             }
         }
 
