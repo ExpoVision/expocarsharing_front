@@ -70,15 +70,19 @@ import { ref } from 'vue'
   </script>
   <style lang="scss" scoped>
     .filter{
+      position: relative;
       border: 1px solid $purple-opacity;
       color: #FFF;
       overflow: hidden;
-      transition: .3s;
-      background: rgba(11, 11, 11, 0.9);
-      backdrop-filter: blur(40px);
+      transition: border .3s;
+      background: rgba(11, 11, 11, 1);
 
       &:hover, &:active{
         border-color: $purple;
+
+        .filter__body{
+          border-color: $purple;
+        }
       }
   
       &__header{
@@ -94,16 +98,26 @@ import { ref } from 'vue'
       }
   
       &__body{
+        position: absolute;
         padding: 0 2.313em;
         font-weight: 400;
         line-height: 24px;
+        left: -1px;
+        right: -1px;
         height: auto;
         max-height: 0;
         transition: .3s;
         overflow: scroll;
+        border: 1px solid $purple-opacity;
+        border-top: none;
+        background: rgba(11, 11, 11, 1);
       }
   
       &--active{
+
+        overflow: initial;
+        border-bottom: none;
+
         .filter h3{
           color: $purple;
         }
@@ -112,6 +126,27 @@ import { ref } from 'vue'
           padding: 1.5em 2.313em;
           max-height: 500px;
         }
+
+        &:first-of-type{
+          z-index: 1005;
+        }
+
+        &:nth-of-type(2){
+          z-index: 1003;
+        }
+
+        &:nth-of-type(3){
+          z-index: 1002;
+        }
+
+        &:nth-of-type(4){
+          z-index: 1001;
+        }
+
+        &:nth-of-type(5){
+          z-index: 1000;
+        }
+
       }
 
       &__block{

@@ -8,7 +8,7 @@
         <div class="footer-bottom">
             <div class="footer-text">
                 <a class="privace-policy">Политика конфиденциальности и обработки персональных данных</a>
-                <div class="copyright">2020. Все права защищены</div>
+                <div class="copyright">2023. Все права защищены</div>
             </div>
             <div class="socials">
 

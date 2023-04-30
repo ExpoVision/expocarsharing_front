@@ -1,6 +1,6 @@
 <template>
     <ProfileSettingsForm 
-        title="Настройки" 
+        title="Смена пароля" 
         btnTitle="Изменить пароль"
         @onSubmit="onPasswordChangeSubmit"
     >

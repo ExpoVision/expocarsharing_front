@@ -109,7 +109,7 @@ export default {
             display: block;
             margin-bottom: 1.1em;
             font-size: 1rem;
-            color: $purple-dark;
+            color: $purple;
         }
     }
 </style>
