@@ -1,5 +1,5 @@
 export default function isAdmin ({ next, store }) {
-    if(store.getters['user/getUserProfileInfo'].role !== 'admin'){
+    if(store.getters['user/getUser'].role !== 'ADMIN'){
         return next({
            name: 'Home'
         })

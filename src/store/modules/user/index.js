@@ -31,13 +31,15 @@ export default {
             state.user = {
                 id: user.id, 
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role: user.role
             }
 
             localStorage.setItem('user', JSON.stringify({
                     id: user.id, 
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    role: user.role
                 })
             );
         },
