@@ -48,6 +48,7 @@ export default {
             { label: "Пользователи", to: "/users" },
             { label: "Настройки", to: "/" },
             { label: "Запросы поддержки", to: "/supportrequests" },
+            { label: "Отзывы", to: "/testimonials" },
         ]
 
         const store = useStore()

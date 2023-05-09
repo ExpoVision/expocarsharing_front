@@ -6,6 +6,7 @@ import AdminUsers from '@admin/views/AdminUsers.vue'
 import AdminUserProfile from '@admin/views/AdminUserProfile.vue'
 import AdminSupportRequests from '@admin/views/AdminSupportRequests.vue'
 import AdminContent from '@admin/views/AdminContent.vue'
+import AdminTestimonials from '@admin/views/AdminTestimonials.vue'
 
 import isAuth from '@/router/isAuth'
 import isAdmin from '@/router/isAdmin'
@@ -67,6 +68,14 @@ const adminProfileRoutes = [
             path: 'supportrequests',
             name: 'AdminSupportRequests',
             component: AdminSupportRequests,
+            meta: {
+                layout: 'AdminLayout'
+            }
+        },
+        {
+            path: 'testimonials',
+            name: 'AdminTestimonials',
+            component: AdminTestimonials,
             meta: {
                 layout: 'AdminLayout'
             }

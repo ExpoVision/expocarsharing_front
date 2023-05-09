@@ -59,6 +59,22 @@ export default createStore({
                 console.log(e)
             }
         },
+        async sendTestimonial({ dispatch }, payload) {
+            try {
+                await axios.post('/review', payload)
+                dispatch('fetchTestimonials')
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async deleteTestimonial({ dispatch }, payload) {
+            try {
+                await axios.delete(`/review/${payload}`)
+                dispatch('fetchTestimonials')
+            } catch (e) {
+                console.log(e)
+            }
+        },
         async sendFeedback(_, payload) {
             try {
                 await axios.post('/feedback', payload)
