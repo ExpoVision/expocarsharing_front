@@ -9,7 +9,7 @@
                     :testimonial="testimonial"
                 ></testimonial-component >
             </div>
-            <a href="" class="testimonials__more-link">загрузить еще</a>
+            <button @click="loadMoreTestimonials" class="testimonials__load-more-btn">Загрузить еще</button>
         </div>
         <SliderSection
             v-if="showTestimonialsSlider" 
@@ -54,9 +54,14 @@ export default {
             window.removeEventListener('resize', toggleTestimonialsView)
         })
 
+        const loadMoreTestimonials = () => {
+            store.dispatch('fetchTestimonials')
+        }
+
         return {
             testimonials,
-            showTestimonialsSlider
+            showTestimonialsSlider,
+            loadMoreTestimonials
         }
     }
 }
@@ -82,8 +87,9 @@ export default {
             margin-bottom: .635em;
             }
 
-            &__more-link{
-            width: 140px;
+            &__load-more-btn{
+            background: none;
+            border: none;
             display: block;
             margin: auto;
             padding-bottom: .5em;
@@ -92,7 +98,7 @@ export default {
             font-weight: 500;
             text-align: center;
             text-transform: uppercase;
-            text-decoration: none;
+            cursor: pointer;
             transition: .3s;
 
             &:hover, &:active{

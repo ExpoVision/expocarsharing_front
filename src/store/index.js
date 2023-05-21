@@ -21,7 +21,8 @@ axios.interceptors.request.use((config) => {
 export default createStore({
     state: {
         faqItems: {},
-        testimonials: {}
+        testimonials: {},
+        testimonialsPerPage: 4
     },
     getters: {
         getCars: (state) => {
@@ -41,6 +42,9 @@ export default createStore({
         setTestimonials(state, payload) {
             state.testimonials = payload
         },
+        decTestimonialsPerPage(state) {
+            state.testimonialsPerPage += 4
+        },
     },
     actions: {
         async fetchFaqItems({ commit }) {
@@ -51,10 +55,13 @@ export default createStore({
                 console.log(e)
             }
         },
-        async fetchTestimonials({ commit }) {
+        async fetchTestimonials({ state, commit }) {
             try {
-                const { data } = await axios.get('/review')
+                const { data } = await axios.get('/review', {
+                    params: {per_page: state.testimonialsPerPage}
+                })
                 commit('setTestimonials', data)
+                commit('decTestimonialsPerPage')
             } catch (e) {
                 console.log(e)
             }

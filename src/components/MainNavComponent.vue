@@ -4,7 +4,6 @@
         <li><router-link to="/">Главная</router-link></li>
         <li><router-link to="/catalog">Каталог</router-link></li>
         <li><router-link to="/terms">Условия</router-link></li>
-        <li><router-link to="/">Каршеринг</router-link></li>
         <li><router-link to="/">Контакты</router-link></li>
         <li><router-link to="/">О нас</router-link></li>
     </ul>  
