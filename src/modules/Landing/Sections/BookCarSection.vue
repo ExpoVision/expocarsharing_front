@@ -20,7 +20,7 @@
                     <ui-input
                         type="text"
                         placeholder="+ 7 ___ ___ - __ - __"
-                        v-model="bookCarData.phoneNumber"
+                        v-model="bookCarData.number"
                     ></ui-input>
                     <ui-btn>Забронировать</ui-btn>
                 </div>
@@ -50,7 +50,10 @@ export default {
         })
 
         const onSubmit = async () => {
-            store.dispatch('carsharing/bookCar', { bookCarData, carId: route.params.id })
+            await store.dispatch('carsharing/bookCar', { 
+                bookCarData: bookCarData.value, 
+                carId: route.params.id
+            })
             bookCarData.value.address = ''
             bookCarData.value.name = ''
             bookCarData.value.number = ''
