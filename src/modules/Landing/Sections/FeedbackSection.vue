@@ -43,8 +43,10 @@ import { useStore } from 'vuex'
           phoneNumber: ''
         })
 
-        const sendFeedback = () => {
-          store.dispatch('sendFeedback', formData.value)
+        const sendFeedback = async () => {
+          await store.dispatch('sendFeedback', formData.value)
+          formData.value.name = ''
+          formData.value.phoneNumber = ''
         }
 
         return {
