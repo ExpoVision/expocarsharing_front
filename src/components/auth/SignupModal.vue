@@ -10,16 +10,8 @@
                     :is="stepString" 
                     v-model="signupForm"
                     @updateFile="onFileUpdate"
+                    @toNextStep="step++"
                 ></component> 
-                <ui-btn 
-                    v-if="step != 3"
-                    width="180px"
-                    padding="1em"
-                    type="white"
-                    @click.prevent="step++"
-                >Следующий шаг
-                    <img src="@/assets/img/icons/arrow-right.svg" alt="">
-                </ui-btn>
             </form>
         </template>
         </ModalComponent>
@@ -31,7 +23,6 @@ import ModalComponent from '@/components/ModalComponent.vue'
 import SignupStepFirst from '@/components/auth/SignupStepFirst.vue'
 import SignupStepSecond from '@/components/auth/SignupStepSecond.vue'
 import SignupStepThird from '@/components/auth/SignupStepThird.vue'
-import UiBtn from '@/components/ui/UiBtn.vue'
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 
@@ -41,8 +32,7 @@ export default {
         ModalComponent,
         SignupStepFirst,
         SignupStepSecond,
-        SignupStepThird,
-        UiBtn
+        SignupStepThird
     },
     props: {
         show: Boolean
@@ -76,13 +66,14 @@ export default {
             phone: '',
             password: '',
             confirmPassword: '',
-            persDataAccessment: false,
+            persDataAccessment: false
         })
 
         const formData = new FormData()
 
         const onFileUpdate = (key, file) => {
             formData.append(`profile[${key}]`, file)
+            signupForm.value[key] = file.name
         }
         const onSignupSubmit = async () => {
                 const userData = {

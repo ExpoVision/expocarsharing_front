@@ -18,32 +18,43 @@
     />
     <UiFileAttachment
         label="Паспорт"
-        placeholderTip="Прикрепить"
+        :placeholderTip="formModel.passport ?? 'Прикрепить'"
         @handleFileChange="(...args) => onFileChange('passport', ...args)"
     />
     <UiFileAttachment
         label="Водительское удостоворение"
-        placeholderTip="Прикрепить"
+        :placeholderTip="formModel.license ?? 'Прикрепить'"
         @handleFileChange="(...args) => onFileChange('license', ...args)"
     />
     <UiFileAttachment
         label="Загрузите ваше Фото"
         :isPhotoAttachment="true"
-        placeholderTip="Загрузить"
+        :placeholderTip="formModel.photo ?? 'Загрузить'"
         @handleFileChange="(...args) => onFileChange('photo', ...args)"
     />
+    <ui-btn 
+        width="180px"
+        padding="1em"
+        type="white"
+        :disabled="!isNextStepAllow"
+        @click.prevent="$emit('nextStep')"
+    >Следующий шаг
+        <img src="@/assets/img/icons/arrow-right.svg" alt="">
+    </ui-btn>
 </template>
 
 <script>
 
 import UiInput from '@/components/ui/UiInput.vue'
+import UiBtn from '@/components/ui/UiBtn.vue'
 import UiFileAttachment from '@/components/ui/UiFileAttachment.vue'
 import { computed } from 'vue'
 
 
 export default {
     components: { 
-        UiInput, 
+        UiInput,
+        UiBtn,
         UiFileAttachment
     },
     props: {
@@ -52,7 +63,7 @@ export default {
             default: () => ({}),
         }
     },
-    emits: ['updateFile'],
+    emits: ['updateFile', 'nextStep'],
     setup(props, { emit }) {
         const formModel = computed({ 
             get: () => props.modelValue,
@@ -63,9 +74,18 @@ export default {
             emit('updateFile', key, file)
         }
 
+        const isNextStepAllow = computed(() => {
+            return      formModel?.value?.name
+                    &&  formModel?.value?.birthday
+                    &&  formModel?.value?.phone
+                    &&  formModel?.value?.license
+                    &&  formModel?.value?.photo
+        })
+
         return {
             formModel,
-            onFileChange
+            onFileChange,
+            isNextStepAllow
         }
     }
 }
